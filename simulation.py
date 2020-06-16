@@ -14,39 +14,47 @@ class Network():
         for i in range(self.nodeCnt):
             self.ns.append(FBA_Node(i))
 
-    def giveReachable(self):
+    # given a node a set of candidate to communicate with
+    def giveCandidates(self):
         for n in self.ns:
             for m in self.ns:
                 if (n.nodeId != m.nodeId and abs(n.networkPos - m.networkPos) < self.reachLimit):
-                    n.addReachable(m.nodeId)
+                    n.addCandidate(m.nodeId)
 
     def showNodes(self):
         for n in self.ns:
             print(n)
 
+    # given a percentage of already failed node to check the failure percentage of the network
     def failNodes(self, p):
         failNodeCnt = int(p*self.nodeCnt)
         possibleFailes = list(combinations([n.nodeId for n in self.ns], failNodeCnt))
+        # the every possible combination of failed nodes
         print(possibleFailes)
-        for p in possibleFailes:
+        lst = []
+        for pf in possibleFailes:
             cfNodeCnt = 0
             for n in self.ns:
-                if n.detectFailure(p):
+                if n.detectFailure(pf):
                     cfNodeCnt += 1
-            print("Failure Rate:{}%".format(cfNodeCnt*100/self.nodeCnt))
+            lst.append(cfNodeCnt/self.nodeCnt)
+        plt.plot(lst)
+        plt.xlabel("{} crashes".format(p))
+        plt.ylabel("Failure nodes")
+        plt.savefig('graph.png')
 
 
 
 if __name__ == "__main__":
     nw = Network(20, 300)
-    nw.giveReachable()
+    nw.giveCandidates()
 
     for n in nw.ns:
         n.selectSlice()
 
-    nw.failNodes(0)
-    #nw.showNodes()
-
+    nw.failNodes(0.1)
+    '''
+    nw.showNodes()
     g = nx.DiGraph()
     for n in nw.ns:
         g.add_node(n.nodeId)
@@ -55,4 +63,5 @@ if __name__ == "__main__":
     nx.draw(g,with_labels=True)
     plt.show()
     plt.savefig('topology.png')
+    '''
 
