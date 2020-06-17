@@ -66,15 +66,16 @@ class FBA_Node(Node):
         csize = random.randint(1,len(_availables))
         self.candidates = random.sample(_availables,csize)
 
-    # each FBA has its slice selection
+    # each FBA has its slice selection method
     def selectSlice(self):
         node_count = len(self.candidates)
         sliceCnt = random.randint(1,node_count)
         for j in range(sliceCnt):
             sliceSize = random.randint(1,node_count)
             self.sliceSet.append(random.sample(self.candidates, sliceSize))
-
+        print("Node {} select slice({}) done".format(self.nodeId,len(self.sliceSet)))
         self.findBlockSet()
+        print("Node {} find blocking set({}) done".format(self.nodeId, len(self.blockSet)))
 
     # given a set of failed node, check if the node is blocked by them
     def detectFailure(self, _fails):
