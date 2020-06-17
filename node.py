@@ -60,7 +60,11 @@ class FBA_Node(Node):
         super().__init__(_id)
 
     def __str__(self):
-        return "{}({}):\n\tslices:{}\n\tblocks:{}".format(self.nodeId, self.active, self.sliceSet,self.blockSet)
+        return "{}:\n\tcandidates:{}\n\tslices:{}\n\tblocks:{}".format(self.nodeId, self.candidates, self.sliceSet,self.blockSet)
+
+    def selectCandidatesOnRand(self,_availables):
+        csize = random.randint(1,len(_availables))
+        self.candidates = random.sample(_availables,csize)
 
     # each FBA has its slice selection
     def selectSlice(self):
@@ -73,8 +77,8 @@ class FBA_Node(Node):
         self.findBlockSet()
 
     # given a set of failed node, check if the node is blocked by them
-    def detectFailure(self, fails):
-        return super().isAllBlocksFail(fails)
+    def detectFailure(self, _fails):
+        return super().isAllBlocksFail(_fails)
 
 
 

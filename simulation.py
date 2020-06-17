@@ -17,9 +17,7 @@ class Network():
     # given a node a set of candidate to communicate with
     def giveCandidates(self):
         for n in self.ns:
-            for m in self.ns:
-                if (n.nodeId != m.nodeId and abs(n.networkPos - m.networkPos) < self.reachLimit):
-                    n.addCandidate(m.nodeId)
+            n.selectCandidatesOnRand([x.nodeId for x in self.ns if x.nodeId != n.nodeId])
 
     def showNodes(self):
         for n in self.ns:
@@ -30,14 +28,16 @@ class Network():
         failNodeCnt = int(p*self.nodeCnt)
         possibleFailes = list(combinations([n.nodeId for n in self.ns], failNodeCnt))
         # the every possible combination of failed nodes
-        print(possibleFailes)
-        lst = []
+        #print(possibleFailes)
+        lst = 70*[0]
         for pf in possibleFailes:
             cfNodeCnt = 0
             for n in self.ns:
                 if n.detectFailure(pf):
                     cfNodeCnt += 1
-            lst.append(cfNodeCnt/self.nodeCnt)
+            r = cfNodeCnt/self.nodeCnt
+            #print(r)
+            lst[int(r*100)] += 1
         plt.plot(lst)
         plt.xlabel("{} crashes".format(p))
         plt.ylabel("Failure nodes")
@@ -46,15 +46,16 @@ class Network():
 
 
 if __name__ == "__main__":
-    nw = Network(20, 300)
+    nw = Network(15, 300)
     nw.giveCandidates()
 
     for n in nw.ns:
         n.selectSlice()
 
-    nw.failNodes(0.1)
+    nw.failNodes(0.2)
+    
+    #nw.showNodes()
     '''
-    nw.showNodes()
     g = nx.DiGraph()
     for n in nw.ns:
         g.add_node(n.nodeId)
