@@ -32,15 +32,15 @@ class Network():
         for pf in possibleFailes:
             cfNodeCnt = 0
             for n in self.ns:
-                if n.detectFailure(pf):
+                if n.isAllSlicesFail(pf):
                     cfNodeCnt += 1
             r = cfNodeCnt/self.nodeCnt
             lst[int(r*100)-1] += 1
         lst = [x/sum(lst) for x in lst]
         plt.plot(lst)
-        plt.xlabel("x% cascading failure")
+        plt.xlabel("x% of failures")
         plt.ylabel("Probability")
-        plt.savefig('graph.png')
+        plt.savefig('{}% in {} fails.png'.format(p*100,self.nodeCnt))
 
 def drawGraph(nw):
     g = nx.DiGraph()
@@ -59,7 +59,7 @@ if __name__ == "__main__":
     for n in nw.ns:
         n.selectSlice()
 
-    nw.failNodes(0.04)
-    #nw.showNodes()
+    nw.failNodes(0.1)
+    nw.showNodes()
     #drawGraph(nw)
 

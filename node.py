@@ -33,34 +33,13 @@ class Node():
             if self.isAllSlicesFail(digit):
                 self.blockSet.append([self.candidates[x] for x in range(len(digit)) if digit[x] is '1'])
 
-    # given a set of failed nodes, check if the node is blocked by them
-    def isAllBlocksFail(self, fails):
-        # if the node is already failed
-        if self.nodeId in fails:
-            self.active = False
-            return True
-
-        blockingSets = self.blockSet.copy()
-        bl = len(blockingSets)
-        for b in range(bl-1,-1,-1):
-            if any(x in blockingSets[b] for x in fails):
-                blockingSets.pop()
-        
-        if len(blockingSets) == 0:
-            self.active = False
-            return True
-        else:
-            self.active = True
-            return False
-
-
 
 class FBA_Node(Node):
     def __init__(self, _id):
         super().__init__(_id)
 
     def __str__(self):
-        return "{}:\n\tcandidates:{}\n\tslices:{}\n\tblocks:{}".format(self.nodeId, self.candidates, self.sliceSet,self.blockSet)
+        return "{}:\n\tcandidates:{}\n\tslices:{}".format(self.nodeId, self.candidates, self.sliceSet)
 
     def selectCandidatesOnRand(self,_availables):
         csize = random.randint(1,len(_availables))
@@ -73,15 +52,21 @@ class FBA_Node(Node):
         for j in range(sliceCnt):
             sliceSize = random.randint(1,node_count)
             self.sliceSet.append(random.sample(self.candidates, sliceSize))
-        print("Node {} select slice({}) done".format(self.nodeId,len(self.sliceSet)))
-        self.findBlockSet()
-        print("Node {} find blocking set({}) done".format(self.nodeId, len(self.blockSet)))
 
-    # given a set of failed node, check if the node is blocked by them
-    def detectFailure(self, _fails):
-        return super().isAllBlocksFail(_fails)
+    # given a set of failed nodes, check if the node is blocked by them
+    def isAllSlicesFail(self, _fails):
+        # if the node is already failed
+        if self.nodeId in _fails:
+            self.active = False
+            return True
 
+        for s in self.sliceSet:
+            if not any(x in s for x in _fails):
+                self.active = True
+                return False
 
+        self.active = False
+        return True
 
 
 
