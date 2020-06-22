@@ -17,6 +17,8 @@ public:
     std::vector<Node> nodes;
     int nodecnt, edgecnt;
 
+    std::vector<Node> currentCommittee;
+
     Config(Topology tp) {
         this->tp = tp;
         nodecnt = this->tp.nodes;
@@ -47,8 +49,13 @@ public:
         }
     }
 
-    void find_committee() {
-
+    std::vector<int> getRandomCommittee() {
+        std::vector<int> vec;
+        for (int i = 0; i < nodecnt; i++) {
+            vec.push_back(i);
+        }
+        random_shuffle(vec.begin(), vec.end());
+        return vec.
     }
 };
 
