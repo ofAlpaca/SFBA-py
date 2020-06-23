@@ -23,17 +23,18 @@ void SimulateStellar(int rounds, Config &config, std::vector<int> stellarCommitt
 
 int main() {
     Topology tp;
-    tp.Random(200, 800, 5, 30);
+    tp.Random(200, 800, 5, 30); //節點數,邊數,邊權重最小值,邊權重最大值
 
     Config SFBA(tp), Stellar(tp);
 
-    SFBA.RandomizeSlices(30, 60, 2, 6);
+    SFBA.RandomizeSlices(30, 60, 2, 6); //每個節點最少選幾個slice,每個節點最多選幾個slice,每個slice最少成員,每個slice最多成員
 
     auto committee = Stellar.getRandomNodes(30);   //stellar committee;
 
     Stellar.LetWeTrustThese(committee, 30, 60, 3, 4, 3, 3);
+    //Stellar固定成員,每個節點最少選幾個slice,每個節點最多選幾個slice,每個slice最少相信幾個stellar成員,每個slice最多相信幾個stellar成員,每個slice最少相信幾個其他成員,每個slice最多相信幾個其他成員,
 
-    SimulateSFBA_OnlyGetAcceptQuorum(100, SFBA);
-    SimulateStellar(100, Stellar, committee);
+    SimulateSFBA_OnlyGetAcceptQuorum(100, SFBA);   //模擬SFBA 100輪
+    SimulateStellar(100, Stellar, committee);      //模擬Stellar 100輪
 }
 
