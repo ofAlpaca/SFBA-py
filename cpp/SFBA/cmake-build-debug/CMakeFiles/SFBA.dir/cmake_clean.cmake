@@ -1,6 +1,7 @@
 file(REMOVE_RECURSE
   "../SFBA"
   "../SFBA.pdb"
+  "CMakeFiles/SFBA.dir/Global.cpp.o"
   "CMakeFiles/SFBA.dir/Node.cpp.o"
   "CMakeFiles/SFBA.dir/Slice.cpp.o"
   "CMakeFiles/SFBA.dir/Topology.cpp.o"

@@ -2,7 +2,6 @@
 // Created by misclicked on 2020/6/21.
 //
 
-#include <random>
 #include <iostream>
 #include <set>
 #include <fstream>
@@ -11,15 +10,15 @@
 #include <climits>
 #include "Topology.h"
 #include "Tree.h"
+#include "Global.h"
 
-void Topology::FromFile(std::string Filename, bool containsWeight) {
+void Topology::FromFile(std::string Filename, int min_latency_ms, int max_latency_ms, bool containsWeight) {
     std::fstream file;
     std::ios_base::openmode option = std::ios::in;
     if (!file)
         throw std::runtime_error("no such file");
 
-    std::mt19937 gen;
-    std::uniform_int_distribution<> r_latency(MIN_LATENCY_MS, MAX_LATENCY_MS);
+    std::uniform_int_distribution<> r_latency(min_latency_ms, max_latency_ms);
 
     file.open(Filename.c_str(), option);
 
@@ -34,7 +33,7 @@ void Topology::FromFile(std::string Filename, bool containsWeight) {
         }
     else
         while (file >> u >> v) {
-            Edges.push_back({u, v, r_latency(gen)});
+            Edges.push_back({u, v, r_latency(Global::rng.get())});
             max_n = std::max({max_n, u, v});
         }
 
@@ -48,12 +47,11 @@ void Topology::FromFile(std::string Filename, bool containsWeight) {
     }
 }
 
-void Topology::Random(int nodes, int edges) {
+void Topology::Random(int nodes, int edges, int min_latency_ms, int max_latency_ms) {
     this->nodes = nodes;
     this->edges = 0;
 
-    std::mt19937 gen;
-    std::uniform_int_distribution<> r_latency(MIN_LATENCY_MS, MAX_LATENCY_MS);
+    std::uniform_int_distribution<> r_latency(min_latency_ms, max_latency_ms);
     std::uniform_int_distribution<> r_node(0, nodes - 1);
     std::vector<std::vector<int>> t = Tree::Generate(nodes);
 
@@ -62,7 +60,7 @@ void Topology::Random(int nodes, int edges) {
 
     for (int u = 0; u < t.size(); u++) {
         for (auto v:t[u]) {
-            int weight = r_latency(gen);
+            int weight = r_latency(Global::rng.get());
             addEdge(u, v, weight);
             this->edges++;
         }
@@ -73,9 +71,9 @@ void Topology::Random(int nodes, int edges) {
     std::set<std::pair<int, int>> se;
 
     for (int i = 0; i < remain;) {
-        int a = r_node(gen);
-        int b = r_node(gen);
-        int weight = r_latency(gen);
+        int a = r_node(Global::rng.get());
+        int b = r_node(Global::rng.get());
+        int weight = r_latency(Global::rng.get());
         if (!se.count({std::min(a, b), std::max(a, b)})) {
             addEdge(a, b, weight);
             this->edges++;

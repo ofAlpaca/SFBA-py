@@ -10,8 +10,6 @@
 
 class Topology {    //network Topology class, undirected
 public:
-    int MIN_LATENCY_MS = 5;
-    int MAX_LATENCY_MS = 100;
 
     int nodes, edges;
 
@@ -30,9 +28,9 @@ public:
 
     Topology() {};
 
-    void FromFile(std::string Filename, bool containsWeight = false);
+    void FromFile(std::string Filename, int min_latency_ms, int max_latency_ms, bool containsWeight = false);
 
-    void Random(int nodes, int edges);
+    void Random(int nodes, int edges, int min_latency_ms, int max_latency_ms);
 
     void Save(std::string Filename, bool replace = true);
 

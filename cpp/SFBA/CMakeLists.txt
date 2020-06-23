@@ -3,5 +3,5 @@ project(SFBA)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(SFBA main.cpp Topology.cpp Topology.h Tree.cpp Tree.h Node.cpp Node.h Slice.cpp Slice.h Config.hpp)
+add_executable(SFBA main.cpp Topology.cpp Topology.h Tree.cpp Tree.h Node.cpp Node.h Slice.cpp Slice.h Config.hpp Global.cpp Global.h)
 set_target_properties(SFBA PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}")

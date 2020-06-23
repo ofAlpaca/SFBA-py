@@ -123,6 +123,33 @@ SFBA/fast:
 	$(MAKE) -f CMakeFiles/SFBA.dir/build.make CMakeFiles/SFBA.dir/build
 .PHONY : SFBA/fast
 
+Global.o: Global.cpp.o
+
+.PHONY : Global.o
+
+# target to build an object file
+Global.cpp.o:
+	$(MAKE) -f CMakeFiles/SFBA.dir/build.make CMakeFiles/SFBA.dir/Global.cpp.o
+.PHONY : Global.cpp.o
+
+Global.i: Global.cpp.i
+
+.PHONY : Global.i
+
+# target to preprocess a source file
+Global.cpp.i:
+	$(MAKE) -f CMakeFiles/SFBA.dir/build.make CMakeFiles/SFBA.dir/Global.cpp.i
+.PHONY : Global.cpp.i
+
+Global.s: Global.cpp.s
+
+.PHONY : Global.s
+
+# target to generate assembly for a file
+Global.cpp.s:
+	$(MAKE) -f CMakeFiles/SFBA.dir/build.make CMakeFiles/SFBA.dir/Global.cpp.s
+.PHONY : Global.cpp.s
+
 Node.o: Node.cpp.o
 
 .PHONY : Node.o
@@ -267,6 +294,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... SFBA"
+	@echo "... Global.o"
+	@echo "... Global.i"
+	@echo "... Global.s"
 	@echo "... Node.o"
 	@echo "... Node.i"
 	@echo "... Node.s"

@@ -85,6 +85,12 @@
 		<Unit filename="/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Config.hpp">
 			<Option target="SFBA"/>
 		</Unit>
+		<Unit filename="/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Global.cpp">
+			<Option target="SFBA"/>
+		</Unit>
+		<Unit filename="/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Global.h">
+			<Option target="SFBA"/>
+		</Unit>
 		<Unit filename="/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Node.cpp">
 			<Option target="SFBA"/>
 		</Unit>
