@@ -15,6 +15,8 @@ public:
 
     int nodes, edges;
 
+    int **AdjList;
+
     struct Edge {
         int u, v, w;
     };
@@ -38,8 +40,6 @@ public:
 
 private:
     void addEdge(int u, int v, int w);
-
-    int **AdjList;
 };
 
 

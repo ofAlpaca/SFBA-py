@@ -8,6 +8,7 @@
 #include <fstream>
 #include <algorithm>
 #include <queue>
+#include <climits>
 #include "Topology.h"
 #include "Tree.h"
 
@@ -114,10 +115,11 @@ void Topology::GenerateAllPairShortestPath() {
     AdjList = new int *[nodes];
     for (int i = 0; i < nodes; i++) {
         AdjList[i] = new int[nodes];
+        for (int j = 0; j < nodes; j++)
+            AdjList[i][j] = INT_MAX;
     }
 
     std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, std::greater<std::pair<int, int>>> pq;
-    int *dis = new int[nodes];
 
     for (int i = 0; i < nodes; i++) {
         AdjList[i][i] = 0;
