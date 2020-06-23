@@ -13,11 +13,11 @@ void SimulateSFBA_OnlyGetAcceptQuorum(int rounds, Config &config) {
     }
 }
 
-void SimulateStella(int rounds, Config &config, std::vector<int> stellaCommittee) {
-    cout << "Stella" << endl;
-    int innerLatency = config.innerCommunicateTime(stellaCommittee);
+void SimulateStellar(int rounds, Config &config, std::vector<int> stellarCommittee) {
+    cout << "Stellar" << endl;
+    int innerLatency = config.innerCommunicateTime(stellarCommittee);
     for (int i = 0; i < rounds; i++) {
-        cout << config.StartGatherWatcher(config.getRandomNodes(200), stellaCommittee) + innerLatency << endl;
+        cout << config.StartGatherWatcher(config.getRandomNodes(200), stellarCommittee) + innerLatency << endl;
     }
 }
 
@@ -25,15 +25,15 @@ int main() {
     Topology tp;
     tp.Random(200, 800, 5, 30);
 
-    Config SFBA(tp), Stella(tp);
+    Config SFBA(tp), Stellar(tp);
 
     SFBA.RandomizeSlices(30, 60, 2, 6);
 
-    auto committee = Stella.getRandomNodes(30);   //stella committee;
+    auto committee = Stellar.getRandomNodes(30);   //stellar committee;
 
-    Stella.LetWeTrustThese(committee, 30, 60, 3, 4, 3, 3);
+    Stellar.LetWeTrustThese(committee, 30, 60, 3, 4, 3, 3);
 
     SimulateSFBA_OnlyGetAcceptQuorum(100, SFBA);
-    SimulateStella(100, Stella, committee);
+    SimulateStellar(100, Stellar, committee);
 }
 
