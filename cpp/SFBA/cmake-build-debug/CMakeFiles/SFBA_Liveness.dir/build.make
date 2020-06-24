@@ -57,18 +57,18 @@ include CMakeFiles/SFBA_Liveness.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/SFBA_Liveness.dir/flags.make
 
-CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.o: CMakeFiles/SFBA_Liveness.dir/flags.make
-CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.o: ../test/Liveness.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.o -c /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/test/Liveness.cpp
+CMakeFiles/SFBA_Liveness.dir/test/Liveness2.cpp.o: CMakeFiles/SFBA_Liveness.dir/flags.make
+CMakeFiles/SFBA_Liveness.dir/test/Liveness2.cpp.o: ../test/Liveness2.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/SFBA_Liveness.dir/test/Liveness2.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/SFBA_Liveness.dir/test/Liveness2.cpp.o -c /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/test/Liveness2.cpp
 
-CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/test/Liveness.cpp > CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.i
+CMakeFiles/SFBA_Liveness.dir/test/Liveness2.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/SFBA_Liveness.dir/test/Liveness2.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/test/Liveness2.cpp > CMakeFiles/SFBA_Liveness.dir/test/Liveness2.cpp.i
 
-CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/test/Liveness.cpp -o CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.s
+CMakeFiles/SFBA_Liveness.dir/test/Liveness2.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/SFBA_Liveness.dir/test/Liveness2.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/test/Liveness2.cpp -o CMakeFiles/SFBA_Liveness.dir/test/Liveness2.cpp.s
 
 CMakeFiles/SFBA_Liveness.dir/Topology.cpp.o: CMakeFiles/SFBA_Liveness.dir/flags.make
 CMakeFiles/SFBA_Liveness.dir/Topology.cpp.o: ../Topology.cpp
@@ -137,7 +137,7 @@ CMakeFiles/SFBA_Liveness.dir/Global.cpp.s: cmake_force
 
 # Object files for target SFBA_Liveness
 SFBA_Liveness_OBJECTS = \
-"CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.o" \
+"CMakeFiles/SFBA_Liveness.dir/test/Liveness2.cpp.o" \
 "CMakeFiles/SFBA_Liveness.dir/Topology.cpp.o" \
 "CMakeFiles/SFBA_Liveness.dir/Tree.cpp.o" \
 "CMakeFiles/SFBA_Liveness.dir/Node.cpp.o" \
@@ -147,19 +147,19 @@ SFBA_Liveness_OBJECTS = \
 # External object files for target SFBA_Liveness
 SFBA_Liveness_EXTERNAL_OBJECTS =
 
-../SFBA_Liveness: CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.o
-../SFBA_Liveness: CMakeFiles/SFBA_Liveness.dir/Topology.cpp.o
-../SFBA_Liveness: CMakeFiles/SFBA_Liveness.dir/Tree.cpp.o
-../SFBA_Liveness: CMakeFiles/SFBA_Liveness.dir/Node.cpp.o
-../SFBA_Liveness: CMakeFiles/SFBA_Liveness.dir/Slice.cpp.o
-../SFBA_Liveness: CMakeFiles/SFBA_Liveness.dir/Global.cpp.o
-../SFBA_Liveness: CMakeFiles/SFBA_Liveness.dir/build.make
-../SFBA_Liveness: CMakeFiles/SFBA_Liveness.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable ../SFBA_Liveness"
+SFBA_Liveness: CMakeFiles/SFBA_Liveness.dir/test/Liveness2.cpp.o
+SFBA_Liveness: CMakeFiles/SFBA_Liveness.dir/Topology.cpp.o
+SFBA_Liveness: CMakeFiles/SFBA_Liveness.dir/Tree.cpp.o
+SFBA_Liveness: CMakeFiles/SFBA_Liveness.dir/Node.cpp.o
+SFBA_Liveness: CMakeFiles/SFBA_Liveness.dir/Slice.cpp.o
+SFBA_Liveness: CMakeFiles/SFBA_Liveness.dir/Global.cpp.o
+SFBA_Liveness: CMakeFiles/SFBA_Liveness.dir/build.make
+SFBA_Liveness: CMakeFiles/SFBA_Liveness.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable SFBA_Liveness"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/SFBA_Liveness.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
-CMakeFiles/SFBA_Liveness.dir/build: ../SFBA_Liveness
+CMakeFiles/SFBA_Liveness.dir/build: SFBA_Liveness
 
 .PHONY : CMakeFiles/SFBA_Liveness.dir/build
 

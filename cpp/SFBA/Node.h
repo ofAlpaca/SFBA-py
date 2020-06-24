@@ -18,7 +18,13 @@ public:
     std::vector<Slice> Slices;
     int inputState;
     int outputState;
+    int Down;
     NodeStatus internalState;
+
+    Node() {
+        internalState = Vote;
+        Down = 0;
+    }
 };
 
 

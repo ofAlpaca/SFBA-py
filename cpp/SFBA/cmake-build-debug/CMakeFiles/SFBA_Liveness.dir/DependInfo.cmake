@@ -9,7 +9,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Slice.cpp" "/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles/SFBA_Liveness.dir/Slice.cpp.o"
   "/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Topology.cpp" "/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles/SFBA_Liveness.dir/Topology.cpp.o"
   "/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Tree.cpp" "/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles/SFBA_Liveness.dir/Tree.cpp.o"
-  "/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/test/Liveness.cpp" "/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.o"
+  "/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/test/Liveness2.cpp" "/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles/SFBA_Liveness.dir/test/Liveness2.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

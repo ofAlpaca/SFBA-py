@@ -286,32 +286,32 @@ Tree.cpp.s:
 	$(MAKE) -f CMakeFiles/SFBA_Performance.dir/build.make CMakeFiles/SFBA_Performance.dir/Tree.cpp.s
 .PHONY : Tree.cpp.s
 
-test/Liveness.o: test/Liveness.cpp.o
+test/Liveness2.o: test/Liveness2.cpp.o
 
-.PHONY : test/Liveness.o
+.PHONY : test/Liveness2.o
 
 # target to build an object file
-test/Liveness.cpp.o:
-	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.o
-.PHONY : test/Liveness.cpp.o
+test/Liveness2.cpp.o:
+	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/test/Liveness2.cpp.o
+.PHONY : test/Liveness2.cpp.o
 
-test/Liveness.i: test/Liveness.cpp.i
+test/Liveness2.i: test/Liveness2.cpp.i
 
-.PHONY : test/Liveness.i
+.PHONY : test/Liveness2.i
 
 # target to preprocess a source file
-test/Liveness.cpp.i:
-	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.i
-.PHONY : test/Liveness.cpp.i
+test/Liveness2.cpp.i:
+	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/test/Liveness2.cpp.i
+.PHONY : test/Liveness2.cpp.i
 
-test/Liveness.s: test/Liveness.cpp.s
+test/Liveness2.s: test/Liveness2.cpp.s
 
-.PHONY : test/Liveness.s
+.PHONY : test/Liveness2.s
 
 # target to generate assembly for a file
-test/Liveness.cpp.s:
-	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.s
-.PHONY : test/Liveness.cpp.s
+test/Liveness2.cpp.s:
+	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/test/Liveness2.cpp.s
+.PHONY : test/Liveness2.cpp.s
 
 test/Performance.o: test/Performance.cpp.o
 
@@ -365,9 +365,9 @@ help:
 	@echo "... Tree.o"
 	@echo "... Tree.i"
 	@echo "... Tree.s"
-	@echo "... test/Liveness.o"
-	@echo "... test/Liveness.i"
-	@echo "... test/Liveness.s"
+	@echo "... test/Liveness2.o"
+	@echo "... test/Liveness2.i"
+	@echo "... test/Liveness2.s"
 	@echo "... test/Performance.o"
 	@echo "... test/Performance.i"
 	@echo "... test/Performance.s"
