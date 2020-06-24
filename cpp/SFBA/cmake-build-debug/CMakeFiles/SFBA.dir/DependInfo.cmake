@@ -9,7 +9,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Slice.cpp" "/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles/SFBA.dir/Slice.cpp.o"
   "/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Topology.cpp" "/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles/SFBA.dir/Topology.cpp.o"
   "/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Tree.cpp" "/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles/SFBA.dir/Tree.cpp.o"
-  "/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/main.cpp" "/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles/SFBA.dir/main.cpp.o"
+  "/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/test/Performance.cpp" "/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles/SFBA.dir/test/Performance.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

@@ -111,17 +111,30 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named SFBA
+# Target rules for targets named SFBA_Liveness
 
 # Build rule for target.
-SFBA: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 SFBA
-.PHONY : SFBA
+SFBA_Liveness: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 SFBA_Liveness
+.PHONY : SFBA_Liveness
 
 # fast build rule for target.
-SFBA/fast:
-	$(MAKE) -f CMakeFiles/SFBA.dir/build.make CMakeFiles/SFBA.dir/build
-.PHONY : SFBA/fast
+SFBA_Liveness/fast:
+	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/build
+.PHONY : SFBA_Liveness/fast
+
+#=============================================================================
+# Target rules for targets named SFBA_Performance
+
+# Build rule for target.
+SFBA_Performance: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 SFBA_Performance
+.PHONY : SFBA_Performance
+
+# fast build rule for target.
+SFBA_Performance/fast:
+	$(MAKE) -f CMakeFiles/SFBA_Performance.dir/build.make CMakeFiles/SFBA_Performance.dir/build
+.PHONY : SFBA_Performance/fast
 
 Global.o: Global.cpp.o
 
@@ -129,7 +142,8 @@ Global.o: Global.cpp.o
 
 # target to build an object file
 Global.cpp.o:
-	$(MAKE) -f CMakeFiles/SFBA.dir/build.make CMakeFiles/SFBA.dir/Global.cpp.o
+	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/Global.cpp.o
+	$(MAKE) -f CMakeFiles/SFBA_Performance.dir/build.make CMakeFiles/SFBA_Performance.dir/Global.cpp.o
 .PHONY : Global.cpp.o
 
 Global.i: Global.cpp.i
@@ -138,7 +152,8 @@ Global.i: Global.cpp.i
 
 # target to preprocess a source file
 Global.cpp.i:
-	$(MAKE) -f CMakeFiles/SFBA.dir/build.make CMakeFiles/SFBA.dir/Global.cpp.i
+	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/Global.cpp.i
+	$(MAKE) -f CMakeFiles/SFBA_Performance.dir/build.make CMakeFiles/SFBA_Performance.dir/Global.cpp.i
 .PHONY : Global.cpp.i
 
 Global.s: Global.cpp.s
@@ -147,7 +162,8 @@ Global.s: Global.cpp.s
 
 # target to generate assembly for a file
 Global.cpp.s:
-	$(MAKE) -f CMakeFiles/SFBA.dir/build.make CMakeFiles/SFBA.dir/Global.cpp.s
+	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/Global.cpp.s
+	$(MAKE) -f CMakeFiles/SFBA_Performance.dir/build.make CMakeFiles/SFBA_Performance.dir/Global.cpp.s
 .PHONY : Global.cpp.s
 
 Node.o: Node.cpp.o
@@ -156,7 +172,8 @@ Node.o: Node.cpp.o
 
 # target to build an object file
 Node.cpp.o:
-	$(MAKE) -f CMakeFiles/SFBA.dir/build.make CMakeFiles/SFBA.dir/Node.cpp.o
+	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/Node.cpp.o
+	$(MAKE) -f CMakeFiles/SFBA_Performance.dir/build.make CMakeFiles/SFBA_Performance.dir/Node.cpp.o
 .PHONY : Node.cpp.o
 
 Node.i: Node.cpp.i
@@ -165,7 +182,8 @@ Node.i: Node.cpp.i
 
 # target to preprocess a source file
 Node.cpp.i:
-	$(MAKE) -f CMakeFiles/SFBA.dir/build.make CMakeFiles/SFBA.dir/Node.cpp.i
+	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/Node.cpp.i
+	$(MAKE) -f CMakeFiles/SFBA_Performance.dir/build.make CMakeFiles/SFBA_Performance.dir/Node.cpp.i
 .PHONY : Node.cpp.i
 
 Node.s: Node.cpp.s
@@ -174,7 +192,8 @@ Node.s: Node.cpp.s
 
 # target to generate assembly for a file
 Node.cpp.s:
-	$(MAKE) -f CMakeFiles/SFBA.dir/build.make CMakeFiles/SFBA.dir/Node.cpp.s
+	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/Node.cpp.s
+	$(MAKE) -f CMakeFiles/SFBA_Performance.dir/build.make CMakeFiles/SFBA_Performance.dir/Node.cpp.s
 .PHONY : Node.cpp.s
 
 Slice.o: Slice.cpp.o
@@ -183,7 +202,8 @@ Slice.o: Slice.cpp.o
 
 # target to build an object file
 Slice.cpp.o:
-	$(MAKE) -f CMakeFiles/SFBA.dir/build.make CMakeFiles/SFBA.dir/Slice.cpp.o
+	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/Slice.cpp.o
+	$(MAKE) -f CMakeFiles/SFBA_Performance.dir/build.make CMakeFiles/SFBA_Performance.dir/Slice.cpp.o
 .PHONY : Slice.cpp.o
 
 Slice.i: Slice.cpp.i
@@ -192,7 +212,8 @@ Slice.i: Slice.cpp.i
 
 # target to preprocess a source file
 Slice.cpp.i:
-	$(MAKE) -f CMakeFiles/SFBA.dir/build.make CMakeFiles/SFBA.dir/Slice.cpp.i
+	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/Slice.cpp.i
+	$(MAKE) -f CMakeFiles/SFBA_Performance.dir/build.make CMakeFiles/SFBA_Performance.dir/Slice.cpp.i
 .PHONY : Slice.cpp.i
 
 Slice.s: Slice.cpp.s
@@ -201,7 +222,8 @@ Slice.s: Slice.cpp.s
 
 # target to generate assembly for a file
 Slice.cpp.s:
-	$(MAKE) -f CMakeFiles/SFBA.dir/build.make CMakeFiles/SFBA.dir/Slice.cpp.s
+	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/Slice.cpp.s
+	$(MAKE) -f CMakeFiles/SFBA_Performance.dir/build.make CMakeFiles/SFBA_Performance.dir/Slice.cpp.s
 .PHONY : Slice.cpp.s
 
 Topology.o: Topology.cpp.o
@@ -210,7 +232,8 @@ Topology.o: Topology.cpp.o
 
 # target to build an object file
 Topology.cpp.o:
-	$(MAKE) -f CMakeFiles/SFBA.dir/build.make CMakeFiles/SFBA.dir/Topology.cpp.o
+	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/Topology.cpp.o
+	$(MAKE) -f CMakeFiles/SFBA_Performance.dir/build.make CMakeFiles/SFBA_Performance.dir/Topology.cpp.o
 .PHONY : Topology.cpp.o
 
 Topology.i: Topology.cpp.i
@@ -219,7 +242,8 @@ Topology.i: Topology.cpp.i
 
 # target to preprocess a source file
 Topology.cpp.i:
-	$(MAKE) -f CMakeFiles/SFBA.dir/build.make CMakeFiles/SFBA.dir/Topology.cpp.i
+	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/Topology.cpp.i
+	$(MAKE) -f CMakeFiles/SFBA_Performance.dir/build.make CMakeFiles/SFBA_Performance.dir/Topology.cpp.i
 .PHONY : Topology.cpp.i
 
 Topology.s: Topology.cpp.s
@@ -228,7 +252,8 @@ Topology.s: Topology.cpp.s
 
 # target to generate assembly for a file
 Topology.cpp.s:
-	$(MAKE) -f CMakeFiles/SFBA.dir/build.make CMakeFiles/SFBA.dir/Topology.cpp.s
+	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/Topology.cpp.s
+	$(MAKE) -f CMakeFiles/SFBA_Performance.dir/build.make CMakeFiles/SFBA_Performance.dir/Topology.cpp.s
 .PHONY : Topology.cpp.s
 
 Tree.o: Tree.cpp.o
@@ -237,7 +262,8 @@ Tree.o: Tree.cpp.o
 
 # target to build an object file
 Tree.cpp.o:
-	$(MAKE) -f CMakeFiles/SFBA.dir/build.make CMakeFiles/SFBA.dir/Tree.cpp.o
+	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/Tree.cpp.o
+	$(MAKE) -f CMakeFiles/SFBA_Performance.dir/build.make CMakeFiles/SFBA_Performance.dir/Tree.cpp.o
 .PHONY : Tree.cpp.o
 
 Tree.i: Tree.cpp.i
@@ -246,7 +272,8 @@ Tree.i: Tree.cpp.i
 
 # target to preprocess a source file
 Tree.cpp.i:
-	$(MAKE) -f CMakeFiles/SFBA.dir/build.make CMakeFiles/SFBA.dir/Tree.cpp.i
+	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/Tree.cpp.i
+	$(MAKE) -f CMakeFiles/SFBA_Performance.dir/build.make CMakeFiles/SFBA_Performance.dir/Tree.cpp.i
 .PHONY : Tree.cpp.i
 
 Tree.s: Tree.cpp.s
@@ -255,35 +282,63 @@ Tree.s: Tree.cpp.s
 
 # target to generate assembly for a file
 Tree.cpp.s:
-	$(MAKE) -f CMakeFiles/SFBA.dir/build.make CMakeFiles/SFBA.dir/Tree.cpp.s
+	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/Tree.cpp.s
+	$(MAKE) -f CMakeFiles/SFBA_Performance.dir/build.make CMakeFiles/SFBA_Performance.dir/Tree.cpp.s
 .PHONY : Tree.cpp.s
 
-main.o: main.cpp.o
+test/Liveness.o: test/Liveness.cpp.o
 
-.PHONY : main.o
+.PHONY : test/Liveness.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) -f CMakeFiles/SFBA.dir/build.make CMakeFiles/SFBA.dir/main.cpp.o
-.PHONY : main.cpp.o
+test/Liveness.cpp.o:
+	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.o
+.PHONY : test/Liveness.cpp.o
 
-main.i: main.cpp.i
+test/Liveness.i: test/Liveness.cpp.i
 
-.PHONY : main.i
+.PHONY : test/Liveness.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) -f CMakeFiles/SFBA.dir/build.make CMakeFiles/SFBA.dir/main.cpp.i
-.PHONY : main.cpp.i
+test/Liveness.cpp.i:
+	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.i
+.PHONY : test/Liveness.cpp.i
 
-main.s: main.cpp.s
+test/Liveness.s: test/Liveness.cpp.s
 
-.PHONY : main.s
+.PHONY : test/Liveness.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) -f CMakeFiles/SFBA.dir/build.make CMakeFiles/SFBA.dir/main.cpp.s
-.PHONY : main.cpp.s
+test/Liveness.cpp.s:
+	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.s
+.PHONY : test/Liveness.cpp.s
+
+test/Performance.o: test/Performance.cpp.o
+
+.PHONY : test/Performance.o
+
+# target to build an object file
+test/Performance.cpp.o:
+	$(MAKE) -f CMakeFiles/SFBA_Performance.dir/build.make CMakeFiles/SFBA_Performance.dir/test/Performance.cpp.o
+.PHONY : test/Performance.cpp.o
+
+test/Performance.i: test/Performance.cpp.i
+
+.PHONY : test/Performance.i
+
+# target to preprocess a source file
+test/Performance.cpp.i:
+	$(MAKE) -f CMakeFiles/SFBA_Performance.dir/build.make CMakeFiles/SFBA_Performance.dir/test/Performance.cpp.i
+.PHONY : test/Performance.cpp.i
+
+test/Performance.s: test/Performance.cpp.s
+
+.PHONY : test/Performance.s
+
+# target to generate assembly for a file
+test/Performance.cpp.s:
+	$(MAKE) -f CMakeFiles/SFBA_Performance.dir/build.make CMakeFiles/SFBA_Performance.dir/test/Performance.cpp.s
+.PHONY : test/Performance.cpp.s
 
 # Help Target
 help:
@@ -293,7 +348,8 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... SFBA"
+	@echo "... SFBA_Liveness"
+	@echo "... SFBA_Performance"
 	@echo "... Global.o"
 	@echo "... Global.i"
 	@echo "... Global.s"
@@ -309,9 +365,12 @@ help:
 	@echo "... Tree.o"
 	@echo "... Tree.i"
 	@echo "... Tree.s"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... test/Liveness.o"
+	@echo "... test/Liveness.i"
+	@echo "... test/Liveness.s"
+	@echo "... test/Performance.o"
+	@echo "... test/Performance.i"
+	@echo "... test/Performance.s"
 .PHONY : help
 
 

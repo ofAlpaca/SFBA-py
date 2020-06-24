@@ -48,5 +48,6 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/SFBA.dir/DependInfo.cmake"
+  "CMakeFiles/SFBA_Liveness.dir/DependInfo.cmake"
+  "CMakeFiles/SFBA_Performance.dir/DependInfo.cmake"
   )

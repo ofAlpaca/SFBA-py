@@ -6,7 +6,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/SFBA.dir/Slice.cpp.o"
   "CMakeFiles/SFBA.dir/Topology.cpp.o"
   "CMakeFiles/SFBA.dir/Tree.cpp.o"
-  "CMakeFiles/SFBA.dir/main.cpp.o"
+  "CMakeFiles/SFBA.dir/test/Performance.cpp.o"
 )
 
 # Per-language clean rules from dependency scanning.

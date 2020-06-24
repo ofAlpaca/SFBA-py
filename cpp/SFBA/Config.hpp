@@ -162,7 +162,7 @@ public:
             }
             if (!updated)break;
         }
-        std::cout << "size:" << committee.size() << std::endl;
+        //std::cout << "size:" << committee.size() << std::endl;
         if (committee.size() < nodecnt * fraction)
             virtual_time = INT_MAX;
         return virtual_time;
