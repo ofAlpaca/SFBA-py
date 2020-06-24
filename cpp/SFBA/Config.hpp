@@ -166,7 +166,9 @@ public:
         }
         if (seWatcher.size()) {
             virtual_time = INT_MAX;
+
         }
+        std::cout<<"size:"<<committee.size()<<std::endl;
         return virtual_time;
     }
 };

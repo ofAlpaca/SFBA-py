@@ -1,1 +1,3 @@
-/usr/bin/c++  -g   CMakeFiles/SFBA.dir/main.cpp.o CMakeFiles/SFBA.dir/Topology.cpp.o CMakeFiles/SFBA.dir/Tree.cpp.o CMakeFiles/SFBA.dir/Node.cpp.o CMakeFiles/SFBA.dir/Slice.cpp.o CMakeFiles/SFBA.dir/Global.cpp.o  -o ../SFBA 
+"C:\Program Files\JetBrains\CLion 2020.1.2\bin\cmake\win\bin\cmake.exe" -E remove -f CMakeFiles\SFBA.dir/objects.a
+C:\PROGRA~2\MINGW-~1\I686-8~1.0-P\mingw32\bin\ar.exe cr CMakeFiles\SFBA.dir/objects.a @CMakeFiles\SFBA.dir\objects1.rsp
+C:\PROGRA~2\MINGW-~1\I686-8~1.0-P\mingw32\bin\G__~1.EXE -g   -Wl,--whole-archive CMakeFiles\SFBA.dir/objects.a -Wl,--no-whole-archive  -o ..\SFBA.exe -Wl,--out-implib,libSFBA.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\SFBA.dir\linklibs.rsp
