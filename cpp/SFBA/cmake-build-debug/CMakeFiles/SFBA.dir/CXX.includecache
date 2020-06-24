@@ -6,41 +6,41 @@
 
 #IncludeRegexTransform: 
 
-F:/SFBA-py/cpp/SFBA/Config.hpp
+/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Config.hpp
 Topology.h
-F:/SFBA-py/cpp/SFBA/Topology.h
+/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Topology.h
 Node.h
-F:/SFBA-py/cpp/SFBA/Node.h
+/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Node.h
 Global.h
-F:/SFBA-py/cpp/SFBA/Global.h
+/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Global.h
 
-F:/SFBA-py/cpp/SFBA/Global.h
+/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Global.h
 random
 -
 chrono
 -
 
-F:/SFBA-py/cpp/SFBA/Node.h
+/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Node.h
 vector
 -
 Slice.h
-F:/SFBA-py/cpp/SFBA/Slice.h
+/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Slice.h
 
-F:/SFBA-py/cpp/SFBA/Slice.h
+/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Slice.h
 vector
 -
 
-F:/SFBA-py/cpp/SFBA/Topology.h
+/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Topology.h
 string
 -
 vector
 -
 
-F:/SFBA-py/cpp/SFBA/main.cpp
+/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/main.cpp
 bits/stdc++.h
 -
 Topology.h
-F:/SFBA-py/cpp/SFBA/Topology.h
+/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Topology.h
 Config.hpp
-F:/SFBA-py/cpp/SFBA/Config.hpp
+/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Config.hpp
 

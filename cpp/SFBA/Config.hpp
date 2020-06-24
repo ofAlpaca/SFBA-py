@@ -104,17 +104,14 @@ public:
         return ret * 2;
     }
 
-    int StartGatherWatcher(std::vector<int> watcher, std::vector<int> committee) {
+    int StartGatherWitness(std::vector<int> committee, float fraction) {
+        assert(fraction <= 1.0);
+        assert(fraction >= 0);
         std::unordered_set<int> remain;
-        std::unordered_set<int> seCommittee, seWatcher;
+        std::unordered_set<int> seCommittee;
         int *reachedTime = new int[nodecnt];
 
-        for (auto it:watcher) {
-            seWatcher.insert(it);
-        }
         for (auto it:committee) {
-            if (seWatcher.count(it))
-                seWatcher.erase(seWatcher.find((it)));
             seCommittee.insert(it);
         }
 
@@ -158,17 +155,16 @@ public:
             for (auto it:updateToCommittee) {
                 committee.push_back(it);
                 seCommittee.insert(it);
-                if (seWatcher.count(it))seWatcher.erase(seWatcher.find(it));
                 remain.erase(remain.find(it));
             }
-            if (seWatcher.size() == 0)break;
+            if (committee.size() >= nodecnt * fraction) {
+                break;
+            }
             if (!updated)break;
         }
-        if (seWatcher.size()) {
+        std::cout << "size:" << committee.size() << std::endl;
+        if (committee.size() < nodecnt * fraction)
             virtual_time = INT_MAX;
-
-        }
-        std::cout<<"size:"<<committee.size()<<std::endl;
         return virtual_time;
     }
 };

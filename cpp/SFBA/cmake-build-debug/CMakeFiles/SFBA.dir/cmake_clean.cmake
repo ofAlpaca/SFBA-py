@@ -1,14 +1,12 @@
 file(REMOVE_RECURSE
-  "../SFBA.exe"
-  "../SFBA.exe.manifest"
+  "../SFBA"
   "../SFBA.pdb"
-  "CMakeFiles/SFBA.dir/Global.cpp.obj"
-  "CMakeFiles/SFBA.dir/Node.cpp.obj"
-  "CMakeFiles/SFBA.dir/Slice.cpp.obj"
-  "CMakeFiles/SFBA.dir/Topology.cpp.obj"
-  "CMakeFiles/SFBA.dir/Tree.cpp.obj"
-  "CMakeFiles/SFBA.dir/main.cpp.obj"
-  "libSFBA.dll.a"
+  "CMakeFiles/SFBA.dir/Global.cpp.o"
+  "CMakeFiles/SFBA.dir/Node.cpp.o"
+  "CMakeFiles/SFBA.dir/Slice.cpp.o"
+  "CMakeFiles/SFBA.dir/Topology.cpp.o"
+  "CMakeFiles/SFBA.dir/Tree.cpp.o"
+  "CMakeFiles/SFBA.dir/main.cpp.o"
 )
 
 # Per-language clean rules from dependency scanning.

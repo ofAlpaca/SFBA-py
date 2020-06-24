@@ -7,9 +7,9 @@ using namespace std;
 void SimulateSFBA_OnlyGetAcceptQuorum(int rounds, Config &config) {
     cout << "SFBA" << endl;
     for (int i = 0; i < rounds; i++) {
-        auto committee = config.getRandomNodes(100);
+        auto committee = config.getRandomNodes(30);
         int innerLatency = config.innerCommunicateTime(committee);
-        cout << config.StartGatherWatcher(config.getRandomNodes(10), committee) + innerLatency << endl;
+        cout << config.StartGatherWitness(committee, 0.5) + innerLatency << endl;
     }
 }
 
@@ -17,7 +17,7 @@ void SimulateStellar(int rounds, Config &config, std::vector<int> stellarCommitt
     cout << "Stellar" << endl;
     int innerLatency = config.innerCommunicateTime(stellarCommittee);
     for (int i = 0; i < rounds; i++) {
-        cout << config.StartGatherWatcher(config.getRandomNodes(1000), stellarCommittee) + innerLatency << endl;
+        cout << config.StartGatherWitness(stellarCommittee, 1) + innerLatency << endl;
     }
 }
 
@@ -27,7 +27,7 @@ int main() {
 
     Config SFBA(tp), Stellar(tp);
 
-    SFBA.RandomizeSlices(30, 60, 2, 10); //每個節點最少選幾個slice,每個節點最多選幾個slice,每個slice最少成員,每個slice最多成員
+    SFBA.RandomizeSlices(30, 60, 2, 5); //每個節點最少選幾個slice,每個節點最多選幾個slice,每個slice最少成員,每個slice最多成員
 
     auto committee = Stellar.getRandomNodes(100);   //stellar committee;
 
