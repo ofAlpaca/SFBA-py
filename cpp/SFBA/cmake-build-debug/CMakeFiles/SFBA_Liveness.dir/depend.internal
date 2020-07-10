@@ -4,10 +4,6 @@
 CMakeFiles/SFBA_Liveness.dir/Global.cpp.o
  /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Global.cpp
  /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Global.h
-CMakeFiles/SFBA_Liveness.dir/Node.cpp.o
- /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Node.cpp
- /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Node.h
- /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Slice.h
 CMakeFiles/SFBA_Liveness.dir/Slice.cpp.o
  /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Slice.cpp
  /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Slice.h
@@ -20,10 +16,10 @@ CMakeFiles/SFBA_Liveness.dir/Tree.cpp.o
  /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Global.h
  /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Tree.cpp
  /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Tree.h
-CMakeFiles/SFBA_Liveness.dir/test/Liveness2.cpp.o
+CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.o
  /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Config.hpp
  /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Global.h
- /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Node.h
+ /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Node.hpp
  /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Slice.h
  /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Topology.h
- /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/test/Liveness2.cpp
+ /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/test/Liveness.cpp

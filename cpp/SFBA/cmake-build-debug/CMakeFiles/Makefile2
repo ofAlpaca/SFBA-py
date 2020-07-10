@@ -53,8 +53,8 @@ CMAKE_BINARY_DIR = /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-d
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/SFBA_Liveness.dir/all
-all: CMakeFiles/SFBA_Performance.dir/all
+all: CMakeFiles/main.dir/all
+all: CMakeFiles/Core.dir/all
 
 .PHONY : all
 
@@ -64,64 +64,64 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/SFBA_Liveness.dir/clean
-clean: CMakeFiles/SFBA_Performance.dir/clean
+clean: CMakeFiles/main.dir/clean
+clean: CMakeFiles/Core.dir/clean
 
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/SFBA_Liveness.dir
+# Target rules for target CMakeFiles/main.dir
 
 # All Build rule for target.
-CMakeFiles/SFBA_Liveness.dir/all:
-	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/depend
-	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5,6,7 "Built target SFBA_Liveness"
-.PHONY : CMakeFiles/SFBA_Liveness.dir/all
+CMakeFiles/main.dir/all: CMakeFiles/Core.dir/all
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/depend
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles --progress-num=6,7 "Built target main"
+.PHONY : CMakeFiles/main.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/SFBA_Liveness.dir/rule: cmake_check_build_system
+CMakeFiles/main.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles 7
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/SFBA_Liveness.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/main.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles 0
-.PHONY : CMakeFiles/SFBA_Liveness.dir/rule
+.PHONY : CMakeFiles/main.dir/rule
 
 # Convenience name for target.
-SFBA_Liveness: CMakeFiles/SFBA_Liveness.dir/rule
+main: CMakeFiles/main.dir/rule
 
-.PHONY : SFBA_Liveness
+.PHONY : main
 
 # clean rule for target.
-CMakeFiles/SFBA_Liveness.dir/clean:
-	$(MAKE) -f CMakeFiles/SFBA_Liveness.dir/build.make CMakeFiles/SFBA_Liveness.dir/clean
-.PHONY : CMakeFiles/SFBA_Liveness.dir/clean
+CMakeFiles/main.dir/clean:
+	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/clean
+.PHONY : CMakeFiles/main.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/SFBA_Performance.dir
+# Target rules for target CMakeFiles/Core.dir
 
 # All Build rule for target.
-CMakeFiles/SFBA_Performance.dir/all:
-	$(MAKE) -f CMakeFiles/SFBA_Performance.dir/build.make CMakeFiles/SFBA_Performance.dir/depend
-	$(MAKE) -f CMakeFiles/SFBA_Performance.dir/build.make CMakeFiles/SFBA_Performance.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles --progress-num=8,9,10,11,12,13,14 "Built target SFBA_Performance"
-.PHONY : CMakeFiles/SFBA_Performance.dir/all
+CMakeFiles/Core.dir/all:
+	$(MAKE) -f CMakeFiles/Core.dir/build.make CMakeFiles/Core.dir/depend
+	$(MAKE) -f CMakeFiles/Core.dir/build.make CMakeFiles/Core.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles --progress-num=1,2,3,4,5 "Built target Core"
+.PHONY : CMakeFiles/Core.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/SFBA_Performance.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles 7
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/SFBA_Performance.dir/all
+CMakeFiles/Core.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles 5
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/Core.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles 0
-.PHONY : CMakeFiles/SFBA_Performance.dir/rule
+.PHONY : CMakeFiles/Core.dir/rule
 
 # Convenience name for target.
-SFBA_Performance: CMakeFiles/SFBA_Performance.dir/rule
+Core: CMakeFiles/Core.dir/rule
 
-.PHONY : SFBA_Performance
+.PHONY : Core
 
 # clean rule for target.
-CMakeFiles/SFBA_Performance.dir/clean:
-	$(MAKE) -f CMakeFiles/SFBA_Performance.dir/build.make CMakeFiles/SFBA_Performance.dir/clean
-.PHONY : CMakeFiles/SFBA_Performance.dir/clean
+CMakeFiles/Core.dir/clean:
+	$(MAKE) -f CMakeFiles/Core.dir/build.make CMakeFiles/Core.dir/clean
+.PHONY : CMakeFiles/Core.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

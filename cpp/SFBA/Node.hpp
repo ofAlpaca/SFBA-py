@@ -2,8 +2,8 @@
 // Created by misclicked on 2020/6/21.
 //
 
-#ifndef SFBA_NODE_H
-#define SFBA_NODE_H
+#ifndef SFBA_NODE_HPP
+#define SFBA_NODE_HPP
 
 
 #include <vector>
@@ -19,13 +19,17 @@ public:
     int inputState;
     int outputState;
     int Down;
+    int bandWidth;
+    int stake;
     NodeStatus internalState;
 
     Node() {
         internalState = Vote;
         Down = 0;
+        stake = 0;
+        bandWidth = INT_MAX;
     }
 };
 
 
-#endif //SFBA_NODE_H
+#endif //SFBA_NODE_HPP

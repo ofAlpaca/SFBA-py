@@ -15,12 +15,12 @@
 void Topology::FromFile(std::string Filename, int min_latency_ms, int max_latency_ms, bool containsWeight) {
     std::fstream file;
     std::ios_base::openmode option = std::ios::in;
-    if (!file)
-        throw std::runtime_error("no such file");
 
     std::uniform_int_distribution<> r_latency(min_latency_ms, max_latency_ms);
 
     file.open(Filename.c_str(), option);
+    if (!file)
+        throw std::runtime_error("no such file");
 
     this->edges = 0;
 
@@ -47,11 +47,11 @@ void Topology::FromFile(std::string Filename, int min_latency_ms, int max_latenc
     }
 }
 
-void Topology::Random(int nodes, int edges, int min_latency_ms, int max_latency_ms) {
+void Topology::Random(int nodes, int edges, int mean_latency_ms, int stddev_latency_ms) {
     this->nodes = nodes;
     this->edges = 0;
 
-    std::uniform_int_distribution<> r_latency(min_latency_ms, max_latency_ms);
+    std::normal_distribution<> r_latency(mean_latency_ms, stddev_latency_ms);
     std::uniform_int_distribution<> r_node(0, nodes - 1);
     std::vector<std::vector<int>> t = Tree::Generate(nodes);
 
@@ -60,7 +60,7 @@ void Topology::Random(int nodes, int edges, int min_latency_ms, int max_latency_
 
     for (int u = 0; u < t.size(); u++) {
         for (auto v:t[u]) {
-            int weight = r_latency(Global::rng.get());
+            int weight = std::max((int) std::round(r_latency(Global::rng.get())), 1);
             addEdge(u, v, weight);
             this->edges++;
         }
@@ -73,7 +73,7 @@ void Topology::Random(int nodes, int edges, int min_latency_ms, int max_latency_
     for (int i = 0; i < remain;) {
         int a = r_node(Global::rng.get());
         int b = r_node(Global::rng.get());
-        int weight = r_latency(Global::rng.get());
+        int weight = std::max((int) std::round(r_latency(Global::rng.get())), 1);
         if (!se.count({std::min(a, b), std::max(a, b)})) {
             addEdge(a, b, weight);
             this->edges++;
@@ -117,10 +117,11 @@ void Topology::GenerateAllPairShortestPath() {
             AdjList[i][j] = INT_MAX;
     }
 
-    std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, std::greater<std::pair<int, int>>> pq;
 
+#pragma omp parallel for default(none)
     for (int i = 0; i < nodes; i++) {
         AdjList[i][i] = 0;
+        std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, std::greater<std::pair<int, int>>> pq;
         pq.push({0, i});
         while (pq.size()) {
             std::pair<int, int> now = pq.top();

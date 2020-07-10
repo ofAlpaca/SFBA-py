@@ -24,7 +24,7 @@ void SimulateSFBA_OnlyGetAcceptQuorum(int rounds, int committeeSize, Config &con
         auto committee = config.getRandomNodes(committeeSize);
         int innerLatency = config.innerCommunicateTime(committee);
         //cout << config.StartGatherWitness(committee, 0.5) + innerLatency << endl;
-        ret += config.StartGatherWitness(committee, 0.5) + innerLatency;
+        ret += config.StartGatherWitness(committee, std::vector<int>(), 0.5) + innerLatency;
     }
     cout << fixed << ret / rounds << endl;
 }
@@ -34,7 +34,7 @@ void SimulateStellar(int rounds, Config &config, std::vector<int> stellarCommitt
     double ret = 0;
     int innerLatency = config.innerCommunicateTime(stellarCommittee);
     for (int i = 0; i < rounds; i++) {
-        ret += config.StartGatherWitness(stellarCommittee, 1) + innerLatency;
+        ret += config.StartGatherWitness(stellarCommittee, std::vector<int>(), 1) + innerLatency;
     }
     cout << fixed << ret / rounds << endl;
 }

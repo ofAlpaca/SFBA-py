@@ -6,29 +6,31 @@
 
 #IncludeRegexTransform: 
 
-/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Config.hpp
-Topology.h
-/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Topology.h
-Node.h
-/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Node.h
-Global.h
-/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Global.h
-
 /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Global.h
 random
 -
 chrono
 -
 
-/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Node.h
-vector
+/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Topology.cpp
+iostream
 -
-Slice.h
-/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Slice.h
-
-/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Slice.h
-vector
+set
 -
+fstream
+-
+algorithm
+-
+queue
+-
+climits
+-
+Topology.h
+/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Topology.h
+Tree.h
+/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Tree.h
+Global.h
+/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Global.h
 
 /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Topology.h
 string
@@ -36,11 +38,7 @@ string
 vector
 -
 
-/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/test/Liveness2.cpp
-bits/stdc++.h
+/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Tree.h
+vector
 -
-../Topology.h
-/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Topology.h
-../Config.hpp
-/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Config.hpp
 

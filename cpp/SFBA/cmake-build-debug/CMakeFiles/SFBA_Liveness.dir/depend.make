@@ -4,10 +4,6 @@
 CMakeFiles/SFBA_Liveness.dir/Global.cpp.o: ../Global.cpp
 CMakeFiles/SFBA_Liveness.dir/Global.cpp.o: ../Global.h
 
-CMakeFiles/SFBA_Liveness.dir/Node.cpp.o: ../Node.cpp
-CMakeFiles/SFBA_Liveness.dir/Node.cpp.o: ../Node.h
-CMakeFiles/SFBA_Liveness.dir/Node.cpp.o: ../Slice.h
-
 CMakeFiles/SFBA_Liveness.dir/Slice.cpp.o: ../Slice.cpp
 CMakeFiles/SFBA_Liveness.dir/Slice.cpp.o: ../Slice.h
 
@@ -20,10 +16,10 @@ CMakeFiles/SFBA_Liveness.dir/Tree.cpp.o: ../Global.h
 CMakeFiles/SFBA_Liveness.dir/Tree.cpp.o: ../Tree.cpp
 CMakeFiles/SFBA_Liveness.dir/Tree.cpp.o: ../Tree.h
 
-CMakeFiles/SFBA_Liveness.dir/test/Liveness2.cpp.o: ../Config.hpp
-CMakeFiles/SFBA_Liveness.dir/test/Liveness2.cpp.o: ../Global.h
-CMakeFiles/SFBA_Liveness.dir/test/Liveness2.cpp.o: ../Node.h
-CMakeFiles/SFBA_Liveness.dir/test/Liveness2.cpp.o: ../Slice.h
-CMakeFiles/SFBA_Liveness.dir/test/Liveness2.cpp.o: ../Topology.h
-CMakeFiles/SFBA_Liveness.dir/test/Liveness2.cpp.o: ../test/Liveness2.cpp
+CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.o: ../Config.hpp
+CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.o: ../Global.h
+CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.o: ../Node.hpp
+CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.o: ../Slice.h
+CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.o: ../Topology.h
+CMakeFiles/SFBA_Liveness.dir/test/Liveness.cpp.o: ../test/Liveness.cpp
 

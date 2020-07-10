@@ -4,10 +4,10 @@
 
 using namespace std;
 
-const int nodes = 200;
-const int edges = nodes * 4;
+int nodes = 1000;
+int edges = nodes * 2;
 const int min_slices = 15;
-const int max_slices = 17;
+const int max_slices = 20;
 const int min_slice_member = 2;
 const int max_slice_member = 7;
 const int min_trust_slices_member = 2;
@@ -16,24 +16,26 @@ const int min_trust_slice_number = 2;
 const int max_trust_slice_number = 3;
 const int min_slice_redundant = 2;
 const int max_slice_redundant = max_slices - max_trust_slice_number;
-const int baseCommitteeCnt = nodes / 4;
+const int baseCommitteeCnt = nodes / 4; //smallest committee
+const int witnessSize = nodes / 4; //witness count
 const int Timeout = 1000;
 
-const float fraction_corrupted = 0.45;
+const float fraction_corrupted = 0.0;
 
-void SimulateSFBA_OnlyGetAcceptQuorum(int rounds, int committeeSize, Config &config) {
+void SimulateSFBA_OnlyGetAcceptQuorum(int rounds, int committeeSize, std::vector<int> witness, Config &config) {
     cout << "SFBA node:" << nodes << endl;
     long double ret = 0;
     for (int i = 0; i < rounds; i++) {
         config.ToggleAllNodeUp();
         config.ToggleRandomNodeDown(fraction_corrupted);
-        auto committee = config.getRandomNodes(committeeSize);
+        auto committee = config.getRandomCommittee();
+        cout << committee.size() << endl;
         int innerLatency = config.innerCommunicateTime(committee);
-        int outerLatency = config.StartGatherWitness(committee, 0.5);
+        int outerLatency = config.StartGatherWitness(committee, witness, 0.5);
         if (outerLatency == INT_MAX) {
             i--;
             ret += (long long) Timeout + innerLatency;
-            config.splitSlicesRandom();
+            //config.splitSlicesRandom();
         } else {
             ret += (long long) outerLatency + innerLatency;
         }
@@ -48,7 +50,7 @@ void SimulateStellar(int rounds, Config &config, std::vector<int> stellarCommitt
     for (int i = 0; i < rounds; i++) {
         config.ToggleAllNodeUp();
         config.ToggleRandomNodeDown(fraction_corrupted);
-        int outerLatency = config.StartGatherWitness(stellarCommittee, 1 - fraction_corrupted);
+        int outerLatency = config.StartGatherWitness(stellarCommittee, std::vector<int>(), 1 - fraction_corrupted);
         ret += (long long) outerLatency + innerLatency;
     }
     cout << fixed << ret / rounds << endl;
@@ -57,7 +59,10 @@ void SimulateStellar(int rounds, Config &config, std::vector<int> stellarCommitt
 
 int main() {
     Topology tp;
-    tp.Random(nodes, edges, 5, 30); //節點數,邊數,邊權重最小值,邊權重最大值
+    //tp.FromFile("p2p-Gnutella08.txt", 15, 15);
+
+    tp.Random(nodes, edges, 5, 2);
+
 
     Config SFBA(tp), Stellar(tp);
 
@@ -71,7 +76,10 @@ int main() {
                             min_slice_redundant, max_slice_redundant);
     //Stellar固定成員,每個節點最少選幾個slice,每個節點最多選幾個slice,每個slice最少相信幾個stellar成員,每個slice最多相信幾個stellar成員,每個slice最少相信幾個其他成員,每個slice最多相信幾個其他成員,
 
-    SimulateSFBA_OnlyGetAcceptQuorum(10, baseCommitteeCnt, SFBA);   //模擬SFBA 100輪
-    SimulateStellar(10, Stellar, committee);      //模擬Stellar 100輪
+
+    auto witness = SFBA.getRandomNodes(witnessSize);
+
+    SimulateSFBA_OnlyGetAcceptQuorum(1, baseCommitteeCnt, witness, SFBA);   //模擬SFBA 100輪
+    //SimulateStellar(10, Stellar, committee);      //模擬Stellar 100輪
 }
 

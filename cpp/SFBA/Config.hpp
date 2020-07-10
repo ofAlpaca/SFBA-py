@@ -7,28 +7,85 @@
 
 
 #include "Topology.h"
-#include "Node.h"
+#include "Node.hpp"
 #include "Global.h"
 
 class Config {
 private:
 
 public:
+    struct trade {
+        int from, to, amount;
+    };
+    typedef std::set<trade, decltype([](const trade &a, const trade &b) {
+        return std::pair<int, int>(a.from, a.to) < std::pair<int, int>(b.from, b.to);
+    })> TradeInfo;
+    struct info {
+        int roundWinner;
+        int roundTime;
+        double successFraction;
+        TradeInfo tradingInfo;
+    };
     Topology tp;
     std::vector<Node> nodes;
+    std::vector<std::vector<info> > Ledger;
+    std::vector<info> epoch; //this round
     int nodecnt, edgecnt;
+    int blockHeight;
+    int currentCommitter;
 
 
-    Config(Topology tp) {
+    Config(Topology &tp) {
         this->tp = tp;
-        this->tp.GenerateAllPairShortestPath();
         nodecnt = this->tp.nodes;
         edgecnt = this->tp.edges;
+        blockHeight = 0;
         nodes.resize(nodecnt);
     }
 
+    virtual void Bootstrap() = 0;
+
+    virtual void Run(int round) = 0;
+
+    void RandomizeNodeBandwidth(int mean_bandwidth, int stddev_bandwidth) {
+        std::normal_distribution<> r_bandwidth(mean_bandwidth, stddev_bandwidth);
+        for (auto &node: nodes) {
+            node.bandWidth = std::max((int) r_bandwidth(Global::rng.get()), 1);
+        }
+    }
+
+    void RandomizeNodeStake(int mean_stake, int stddev_stake) {
+        std::normal_distribution<> r_stake(mean_stake, stddev_stake);
+        for (auto &node: nodes) {
+            node.stake = std::max((int) r_stake(Global::rng.get()), 0);
+        }
+    }
+
+    TradeInfo
+    GenerateRandomTradingInfo(int mean_trading_count, int stddev_trading_count, int mean_trading_amount,
+                              int stddev_trading_amount) {
+        std::normal_distribution<> r_trading_count(mean_trading_count, stddev_trading_count);
+        std::normal_distribution<> r_trading_amount(mean_trading_amount, stddev_trading_amount);
+        std::uniform_int_distribution<int> r_node(0, this->nodecnt - 1);
+        int trading_count = std::max((int) r_trading_count(Global::rng.get()), 1);
+
+        TradeInfo set_trade;
+
+        for (int i = 0; i < trading_count; i++) {
+            int A = r_node(Global::rng.get());
+            int B;
+            do {
+                B = r_node(Global::rng.get());
+            } while (A == B && set_trade.count({A, B}));
+            int trading_amount = std::max((int) r_trading_amount(Global::rng.get()), 0);
+            set_trade.insert(trade{A, B, trading_amount});
+        }
+
+        return set_trade;
+    }
+
     void ToggleRandomNodeDown(float fraction) {
-        assert(fraction < 1.0);
+        assert(fraction <= 1.0);
         std::vector<int> shaker;
         for (int i = 0; i < nodecnt; i++) {
             shaker.push_back(i);
@@ -84,6 +141,7 @@ public:
         }
     }
 
+
     void RandomizeSlices(int min_slices, int max_slices, int min_slice_member, int max_slice_member) {
         assert(max_slice_member < nodecnt);
         std::uniform_int_distribution<> r_slices(min_slices, max_slices);
@@ -114,6 +172,24 @@ public:
         random_shuffle(vec.begin(), vec.end());
         return std::vector<int>(vec.begin(), vec.begin() + n);
     }
+
+    std::vector<int> getRandomCommittee() {
+        std::vector<int> vec;
+        std::set<int> se;
+        std::uniform_int_distribution<> r_committer(0, this->nodecnt - 1);
+        int committer = r_committer(Global::rng.get());
+        for (auto &slice: this->nodes[committer].Slices) {
+            for (auto &node: slice.members) {
+                se.insert(node);
+            }
+        }
+        for (auto it:se) {
+            vec.push_back(it);
+        }
+        currentCommitter = committer;
+        return vec;
+    }
+
 
     int innerCommunicateTime(std::vector<int> nodes) {
         int ret = 0;
@@ -147,80 +223,135 @@ public:
         }
     }
 
-    int StartGatherWitness(std::vector<int> committee, float fraction) {
+    info
+    StartGatherWitness(std::vector<int> committee, std::vector<int> witness, float fraction, int mean_trading_count,
+                       int stddev_trading_count, int mean_trading_amount, int stddev_trading_amount) {
         assert(fraction <= 1.0);
         assert(fraction >= 0);
         std::vector<int> tmpCommittee;
-        tmpCommittee.swap(committee);
-        for (auto it:tmpCommittee) {
-            if (nodes[it].Down != 1) {
-                committee.push_back(it);
-            }
-        }
+
+        std::vector<int> timestamp;
+        std::vector<int> timestampSlice;
+        std::vector<int> parent;            //which slice node ref this round
+        std::vector<int> penalty;           //penalty when reached node.bandWidth
+        std::vector<int> capacity;           //used to calc current bandwidth
+        std::vector<int> sliceRemain;
+        std::vector<std::vector<int> > Slice;
         std::unordered_set<int> remain;
         std::unordered_set<int> seCommittee;
-        int *reachedTime = new int[nodecnt];
+        std::vector<std::vector<int>> setMap;   //N way list to reduce
+        std::unordered_map<int, int> idMap; // transfer slice id to real id
 
-        for (auto it:committee) {
-            seCommittee.insert(it);
-        }
+        timestamp.resize(this->nodecnt, INT_MAX);
+        penalty.resize(this->nodecnt);
+        setMap.resize(this->nodecnt);
+        capacity.resize(this->nodecnt);
+        parent.resize(this->nodecnt, -1);
 
-        for (int i = 0; i < nodecnt; i++) {
-            if (!seCommittee.count(i)) {
-                remain.insert(i);
-                reachedTime[i] = INT_MAX;
-            } else {
-                reachedTime[i] = 0;
-            }
-        }
 
-        std::vector<int> updateToCommittee;
-        int virtual_time = 0;
-        for (;; virtual_time++) {
-            bool updated = false;
-            updateToCommittee.clear();
-            //check if we can update
-            for (auto nowNodeIndex: remain) {
-                int sliceAcceptTime = INT_MAX;
-                if (nodes[nowNodeIndex].Down == 1)continue;
-                for (int j = 0; j < nodes[nowNodeIndex].Slices.size(); j++) {
-                    bool sliceOK = true;
-                    int currentSliceAcceptTime = 0;
-                    for (int k = 0; k < nodes[nowNodeIndex].Slices[j].members.size(); k++) {
-                        if (nodes[nodes[nowNodeIndex].Slices[j].members[k]].Down == 1) {
-                            sliceOK = false;
-                            break;
-                        }
-                        if (!seCommittee.count(nodes[nowNodeIndex].Slices[j].members[k])) {
-                            sliceOK = false;
-                        } else {
-                            currentSliceAcceptTime = std::max(currentSliceAcceptTime,
-                                                              tp.AdjList[nowNodeIndex][nodes[nowNodeIndex].Slices[j].members[k]]);
-                        }
-                    }
-                    if (sliceOK) {
-                        sliceAcceptTime = std::min(sliceAcceptTime, currentSliceAcceptTime);
-                        updated = true;
-                    }
-                }
-                if (sliceAcceptTime <= virtual_time) {
-                    updateToCommittee.push_back(nowNodeIndex);
-                }
-            }
-            for (auto it:updateToCommittee) {
+        //clear out "down" nodes
+        tmpCommittee.swap(committee);
+        for (auto it:tmpCommittee)
+            if (nodes[it].Down != 1)
                 committee.push_back(it);
-                seCommittee.insert(it);
-                remain.erase(remain.find(it));
+
+        //initialize timestamp
+        for (auto it:committee)
+            timestamp[it] = 0;
+
+        //gather remaining nodes
+        for (auto it:committee)
+            seCommittee.insert(it);
+        for (int i = 0; i < nodecnt; i++)
+            if (!seCommittee.count(i))
+                if (nodes[i].Down != 1)
+                    remain.insert(i);
+
+        //preprocess
+        int sliceID = 0;
+        for (auto idx: remain) {
+            for (auto &slice: nodes[idx].Slices) {
+                for (auto member: slice.members) {
+                    setMap[member].push_back(sliceID);
+                }
+                Slice.push_back(std::vector<int>(slice.members));
+                sliceRemain.push_back(slice.members.size());
+                idMap[sliceID++] = idx;
             }
-            if (committee.size() >= nodecnt * fraction) {
-                break;
-            }
-            if (!updated)break;
         }
-        //std::cout << "size:" << committee.size() << " " << nodecnt * fraction << std::endl;
-        if (committee.size() < nodecnt * fraction)
-            virtual_time = INT_MAX;
-        return virtual_time;
+
+        timestampSlice.resize(sliceID);
+
+        std::vector<int> currentRound, nextRound;
+        for (auto it:committee) {
+            currentRound.push_back(it);
+        }
+
+
+        while (currentRound.size()) {
+            //std::cout << currentRound.size() << std::endl;
+            for (auto it:currentRound) {
+                for (auto sID:setMap[it]) {
+                    int nodeID = idMap[sID];
+                    sliceRemain[sID]--;
+                    timestampSlice[sID] = std::max(this->tp.AdjList[it][idMap[sID]] + timestamp[it],
+                                                   timestampSlice[sID]);
+                    if (sliceRemain[sID] == 0) {
+                        nextRound.push_back(idMap[sID]);
+                        if (timestampSlice[sID] < timestamp[idMap[sID]]) {
+                            timestamp[idMap[sID]] = timestampSlice[sID];
+                            parent[idMap[sID]] = sID;
+                        }
+                    }
+                }
+            }
+            currentRound.swap(nextRound);
+            nextRound.clear();
+        }
+
+
+        std::set<int> seWitness;
+        for (auto &it:witness)seWitness.insert(it);
+
+        std::vector<int> refCnt;
+        refCnt.resize(this->nodecnt);
+
+        for (int i = 0; i < this->nodecnt; i++) {
+            int sID = parent[i];
+            if (sID == -1)continue;
+            for (auto &nID:Slice[sID]) {
+                refCnt[nID]++;
+            }
+        }
+        for (int i = 0; i < this->nodecnt; i++) {
+            if (refCnt[i] > this->nodes[i].bandWidth) {
+                timestamp[i] = (double) timestamp[i] * (refCnt[i] / (double) this->nodes[i].bandWidth);
+            }
+        }
+
+        //calc the time we gather witness*fraction
+        std::vector<std::pair<int, int> > vCalcPri;
+        for (int i = 0; i < this->nodecnt; i++) {
+            vCalcPri.push_back({timestamp[i], i});
+        }
+
+        std::sort(vCalcPri.begin(), vCalcPri.end());
+        int now = 0, maxTime = 0;
+        for (auto &it:vCalcPri) {
+            //std::cout << it.first << "\t" << it.second << "\t" << seWitness.count(it.second) << "\t"
+            //          << refCnt[it.second]
+            //          << std::endl;
+            if (seWitness.count(it.second)) {
+                now++;
+                maxTime = std::max(maxTime, it.first);
+                if (now >= witness.size() * fraction)break;
+            }
+        }
+
+        return {currentCommitter, maxTime,
+                (1 - std::count(timestamp.begin(), timestamp.end(), INT_MAX) / (double) timestamp.size()),
+                GenerateRandomTradingInfo(mean_trading_count, stddev_trading_count, mean_trading_amount,
+                                          stddev_trading_amount)};
     }
 };
 

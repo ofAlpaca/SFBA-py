@@ -70,92 +70,18 @@ CMakeFiles/SFBA_Performance.dir/test/Performance.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/SFBA_Performance.dir/test/Performance.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/test/Performance.cpp -o CMakeFiles/SFBA_Performance.dir/test/Performance.cpp.s
 
-CMakeFiles/SFBA_Performance.dir/Topology.cpp.o: CMakeFiles/SFBA_Performance.dir/flags.make
-CMakeFiles/SFBA_Performance.dir/Topology.cpp.o: ../Topology.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/SFBA_Performance.dir/Topology.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/SFBA_Performance.dir/Topology.cpp.o -c /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Topology.cpp
-
-CMakeFiles/SFBA_Performance.dir/Topology.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/SFBA_Performance.dir/Topology.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Topology.cpp > CMakeFiles/SFBA_Performance.dir/Topology.cpp.i
-
-CMakeFiles/SFBA_Performance.dir/Topology.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/SFBA_Performance.dir/Topology.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Topology.cpp -o CMakeFiles/SFBA_Performance.dir/Topology.cpp.s
-
-CMakeFiles/SFBA_Performance.dir/Tree.cpp.o: CMakeFiles/SFBA_Performance.dir/flags.make
-CMakeFiles/SFBA_Performance.dir/Tree.cpp.o: ../Tree.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/SFBA_Performance.dir/Tree.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/SFBA_Performance.dir/Tree.cpp.o -c /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Tree.cpp
-
-CMakeFiles/SFBA_Performance.dir/Tree.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/SFBA_Performance.dir/Tree.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Tree.cpp > CMakeFiles/SFBA_Performance.dir/Tree.cpp.i
-
-CMakeFiles/SFBA_Performance.dir/Tree.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/SFBA_Performance.dir/Tree.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Tree.cpp -o CMakeFiles/SFBA_Performance.dir/Tree.cpp.s
-
-CMakeFiles/SFBA_Performance.dir/Node.cpp.o: CMakeFiles/SFBA_Performance.dir/flags.make
-CMakeFiles/SFBA_Performance.dir/Node.cpp.o: ../Node.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/SFBA_Performance.dir/Node.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/SFBA_Performance.dir/Node.cpp.o -c /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Node.cpp
-
-CMakeFiles/SFBA_Performance.dir/Node.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/SFBA_Performance.dir/Node.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Node.cpp > CMakeFiles/SFBA_Performance.dir/Node.cpp.i
-
-CMakeFiles/SFBA_Performance.dir/Node.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/SFBA_Performance.dir/Node.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Node.cpp -o CMakeFiles/SFBA_Performance.dir/Node.cpp.s
-
-CMakeFiles/SFBA_Performance.dir/Slice.cpp.o: CMakeFiles/SFBA_Performance.dir/flags.make
-CMakeFiles/SFBA_Performance.dir/Slice.cpp.o: ../Slice.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/SFBA_Performance.dir/Slice.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/SFBA_Performance.dir/Slice.cpp.o -c /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Slice.cpp
-
-CMakeFiles/SFBA_Performance.dir/Slice.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/SFBA_Performance.dir/Slice.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Slice.cpp > CMakeFiles/SFBA_Performance.dir/Slice.cpp.i
-
-CMakeFiles/SFBA_Performance.dir/Slice.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/SFBA_Performance.dir/Slice.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Slice.cpp -o CMakeFiles/SFBA_Performance.dir/Slice.cpp.s
-
-CMakeFiles/SFBA_Performance.dir/Global.cpp.o: CMakeFiles/SFBA_Performance.dir/flags.make
-CMakeFiles/SFBA_Performance.dir/Global.cpp.o: ../Global.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/SFBA_Performance.dir/Global.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/SFBA_Performance.dir/Global.cpp.o -c /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Global.cpp
-
-CMakeFiles/SFBA_Performance.dir/Global.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/SFBA_Performance.dir/Global.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Global.cpp > CMakeFiles/SFBA_Performance.dir/Global.cpp.i
-
-CMakeFiles/SFBA_Performance.dir/Global.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/SFBA_Performance.dir/Global.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/Global.cpp -o CMakeFiles/SFBA_Performance.dir/Global.cpp.s
-
 # Object files for target SFBA_Performance
 SFBA_Performance_OBJECTS = \
-"CMakeFiles/SFBA_Performance.dir/test/Performance.cpp.o" \
-"CMakeFiles/SFBA_Performance.dir/Topology.cpp.o" \
-"CMakeFiles/SFBA_Performance.dir/Tree.cpp.o" \
-"CMakeFiles/SFBA_Performance.dir/Node.cpp.o" \
-"CMakeFiles/SFBA_Performance.dir/Slice.cpp.o" \
-"CMakeFiles/SFBA_Performance.dir/Global.cpp.o"
+"CMakeFiles/SFBA_Performance.dir/test/Performance.cpp.o"
 
 # External object files for target SFBA_Performance
 SFBA_Performance_EXTERNAL_OBJECTS =
 
 ../SFBA_Performance: CMakeFiles/SFBA_Performance.dir/test/Performance.cpp.o
-../SFBA_Performance: CMakeFiles/SFBA_Performance.dir/Topology.cpp.o
-../SFBA_Performance: CMakeFiles/SFBA_Performance.dir/Tree.cpp.o
-../SFBA_Performance: CMakeFiles/SFBA_Performance.dir/Node.cpp.o
-../SFBA_Performance: CMakeFiles/SFBA_Performance.dir/Slice.cpp.o
-../SFBA_Performance: CMakeFiles/SFBA_Performance.dir/Global.cpp.o
 ../SFBA_Performance: CMakeFiles/SFBA_Performance.dir/build.make
+../SFBA_Performance: libCore.a
 ../SFBA_Performance: CMakeFiles/SFBA_Performance.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable ../SFBA_Performance"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable ../SFBA_Performance"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/SFBA_Performance.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
