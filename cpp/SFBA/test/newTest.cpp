@@ -18,7 +18,7 @@ int main() {
     SFBA sfba(tp);
     Stellar stellar(tp);
 
-    sfba.fraction_corrupted = 0;
+    sfba.fraction_corrupted = 0.3;
 
     sfba.Bootstrap();
     sfba.Run(1);

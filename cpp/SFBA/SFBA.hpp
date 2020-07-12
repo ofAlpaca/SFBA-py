@@ -29,7 +29,7 @@ public:
 
     std::vector<int> witness;
 
-    int round_per_epoch = 100;
+    int round_per_epoch = 200;
 
     float fraction_corrupted = 0.0;
 
@@ -52,6 +52,7 @@ public:
     };
 
     double getNodeMalice(int from, int to) {
+        if (this->blockHeight == 1)return 0;
         return 1 - honestNow[from][to] / decayRateSumMalice;
     }
 
@@ -60,6 +61,7 @@ public:
     }
 
     double getNodeFailChance(int id) {
+        if (this->blockHeight == 1)return 0;
         return 1 - availableNow[id] / decayRateSumMalice;
     }
 
@@ -152,15 +154,16 @@ public:
         honestPre.swap(honestNow);
         for (int i = 0; i < this->nodecnt; i++) {
             for (int j = 0; j < this->nodecnt; j++) {
-                honestNow[i][j] =
-                        decayRateMalice * (0 + stakePorportion[j]) * honestPre[i][j] +
-                        ((tradingInfo.count({i, j})) ||
-                         (tradingInfo.count({j, i})) ? 1
-                                                     : 0);
+                if (this->blockHeight == 1)
+                    honestNow[i][j] = decayRateMalice * (false ? (0 + stakePorportion[j]) : 1) * honestPre[i][j] + 1;
+                else
+                    honestNow[i][j] =
+                            decayRateMalice * (false ? (0 + stakePorportion[j]) : 1) * honestPre[i][j] +
+                            ((tradingInfo.count({i, j})) || (tradingInfo.count({j, i})) ? 1.0 : 0.0);
             }
         }
-        decayRateCurrentMalice *= decayRateMalice;
         decayRateSumMalice += decayRateCurrentMalice;
+        decayRateCurrentMalice *= decayRateMalice;
     }
 
     void updateProbOfFaliure(TradeInfo &tradingInfo) {
@@ -183,10 +186,15 @@ public:
 
         availablePre.swap(availableNow);
         for (int i = 0; i < this->nodecnt; i++) {
-            availableNow[i] = decayRateFailure * bandWidthPorportion[i] * availablePre[i] + (currentInRound.count(i));
+            if (this->blockHeight == 1)
+                availableNow[i] = decayRateFailure * (false ? bandWidthPorportion[i] : 1) * availablePre[i] +
+                                  1;
+            else
+                availableNow[i] = decayRateFailure * (false ? bandWidthPorportion[i] : 1) * availablePre[i] +
+                                  (currentInRound.count(i)) ? 1.0 : 0.0;
         }
-        decayRateCurrentFailure *= decayRateFailure;
         decayRateSumFailure += decayRateCurrentFailure;
+        decayRateCurrentFailure *= decayRateFailure;
     }
 
     void updateSlices() {
@@ -196,6 +204,7 @@ public:
                 double probOfNotDeceive = 1;
                 for (auto member: slice.members) {
                     double maliceprob = getNodeMalice(i, member);
+                    //std::cout << "malice: " << maliceprob << std::endl;
                     probOfNotDeceive *= 1 - getNodeMalice(i, member);
                 }
                 if (1 - probOfNotDeceive <= thresholdDeceive[i]) {
@@ -213,6 +222,7 @@ public:
                 double probOfNotBlock = 1;
                 for (auto it:tmp) {
                     double failchance = getNodeFailChance(it);
+                    //std::cout << "fail: " << failchance << std::endl;
                     probOfNotBlock *= 1 - getNodeFailChance(it);
                 }
                 if (1 - probOfNotBlock <= thresholdBlocking[i]) {
@@ -226,20 +236,21 @@ public:
 
     void releaseThreshold(double releaseRateDeceive = 2.0, double releaseRateBlocking = 2.0) {
         for (int i = 0; i < this->nodecnt; i++) {
-            thresholdDeceive[i] *= releaseRateDeceive;
-            thresholdBlocking[i] *= releaseRateBlocking;
+            thresholdDeceive[i] = std::min(thresholdDeceive[i] * releaseRateDeceive, 1.1);
+            thresholdBlocking[i] = std::min(thresholdBlocking[i] * releaseRateBlocking, 1.1);
         }
     }
 
     void Bootstrap() override {
+        this->blockHeight = 1;
         honestNow.resize(nodecnt);
-        for (auto &it:honestNow)it.resize(nodecnt, 1);
+        for (auto &it:honestNow)it.resize(nodecnt, 0);
         honestPre.resize(nodecnt);
         for (auto &it:honestPre)it.resize(nodecnt);
-        availableNow.resize(nodecnt, 1);
+        availableNow.resize(nodecnt, 0);
         availablePre.resize(nodecnt);
-        thresholdDeceive.resize(this->nodecnt, 0.05);   // init x: can afford x% of chance being blocked
-        thresholdBlocking.resize(this->nodecnt, 0.5); // init x: can afford x% of chance being blocked
+        thresholdDeceive.resize(this->nodecnt, 0.6);   // init x: can afford x% of chance being blocked
+        thresholdBlocking.resize(this->nodecnt, 0.6); // init x: can afford x% of chance being blocked
         witness = getRandomNodes(witnessSize);
         Ledger.clear();
         RandomizeNodeStake(mean_stake, stddev_stake);
@@ -250,13 +261,14 @@ public:
     void Run(int epoch) override {
         for (int __i = 0; __i < epoch; __i++) {
             this->epoch.clear();
-            for (int __i_ = 0; __i_ < round_per_epoch; __i_++) {
+            for (int __i_ = 0; __i_ < round_per_epoch; __i_++, this->blockHeight++) {
                 ToggleAllNodeUp();
                 ToggleRandomNodeDown(fraction_corrupted);
                 auto committee = getRandomCommittee();
                 int innerLatency = innerCommunicateTime(committee);
                 info currentRound = StartGatherWitness(committee, witness, 0.5, mean_trading_count,
-                                                       stddev_trading_amount, mean_trading_count, stddev_trading_count);
+                                                       stddev_trading_count, mean_trading_amount,
+                                                       stddev_trading_amount);
                 if (currentRound.roundTime == INT_MAX) {
                     currentRound.roundTime = innerLatency + Timeout;
                     currentRound.roundWinner = -1;
@@ -264,10 +276,11 @@ public:
                     RandomizeSlicesInFlavorOfMaliceAndBandwidth(min_slices, max_slices, min_slice_member,
                                                                 max_slice_member);
                 }
-                std::cout << currentRound.roundTime << "\t" << currentRound.roundWinner << std::endl;
+                std::cout << currentRound.roundTime << "\t" << this->downed << " " << currentRound.successFraction
+                          << std::endl;
                 updateProbOfMalice(currentRound.tradingInfo);
                 updateProbOfFaliure(currentRound.tradingInfo);
-                updateSlices();
+                //updateSlices();
                 this->epoch.push_back(currentRound);
             }
             Ledger.push_back(this->epoch);

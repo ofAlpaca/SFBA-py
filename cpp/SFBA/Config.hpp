@@ -33,6 +33,7 @@ public:
     int nodecnt, edgecnt;
     int blockHeight;
     int currentCommitter;
+    int downed;
 
 
     Config(Topology &tp) {
@@ -91,8 +92,10 @@ public:
             shaker.push_back(i);
         }
         std::random_shuffle(shaker.begin(), shaker.end());
+        this->downed = 0;
         for (int i = 0; i < nodecnt * fraction; i++) {
             nodes[shaker[i]].Down = 1;
+            this->downed++;
         }
     }
 
@@ -100,6 +103,7 @@ public:
         for (int i = 0; i < nodecnt; i++) {
             nodes[i].Down = 0;
         }
+        this->downed = 0;
     }
 
     void
@@ -349,7 +353,7 @@ public:
         }
 
         return {currentCommitter, maxTime,
-                (1 - std::count(timestamp.begin(), timestamp.end(), INT_MAX) / (double) timestamp.size()),
+                static_cast<double>((timestamp.size() - std::count(timestamp.begin(), timestamp.end(), INT_MAX))),
                 GenerateRandomTradingInfo(mean_trading_count, stddev_trading_count, mean_trading_amount,
                                           stddev_trading_amount)};
     }
