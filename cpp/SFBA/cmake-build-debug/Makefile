@@ -56,17 +56,6 @@ CMAKE_BINARY_DIR = /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-d
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/home/misclicked/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/201.7846.88/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
-
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -77,6 +66,17 @@ rebuild_cache:
 rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/home/misclicked/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/201.7846.88/bin/cmake/linux/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -111,6 +111,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named Core
+
+# Build rule for target.
+Core: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 Core
+.PHONY : Core
+
+# fast build rule for target.
+Core/fast:
+	$(MAKE) -f CMakeFiles/Core.dir/build.make CMakeFiles/Core.dir/build
+.PHONY : Core/fast
+
+#=============================================================================
 # Target rules for targets named main
 
 # Build rule for target.
@@ -124,17 +137,30 @@ main/fast:
 .PHONY : main/fast
 
 #=============================================================================
-# Target rules for targets named Core
+# Target rules for targets named main3
 
 # Build rule for target.
-Core: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 Core
-.PHONY : Core
+main3: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 main3
+.PHONY : main3
 
 # fast build rule for target.
-Core/fast:
-	$(MAKE) -f CMakeFiles/Core.dir/build.make CMakeFiles/Core.dir/build
-.PHONY : Core/fast
+main3/fast:
+	$(MAKE) -f CMakeFiles/main3.dir/build.make CMakeFiles/main3.dir/build
+.PHONY : main3/fast
+
+#=============================================================================
+# Target rules for targets named main2
+
+# Build rule for target.
+main2: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 main2
+.PHONY : main2
+
+# fast build rule for target.
+main2/fast:
+	$(MAKE) -f CMakeFiles/main2.dir/build.make CMakeFiles/main2.dir/build
+.PHONY : main2/fast
 
 Global.o: Global.cpp.o
 
@@ -271,16 +297,72 @@ test/newTest.cpp.s:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/test/newTest.cpp.s
 .PHONY : test/newTest.cpp.s
 
+test/newTest2.o: test/newTest2.cpp.o
+
+.PHONY : test/newTest2.o
+
+# target to build an object file
+test/newTest2.cpp.o:
+	$(MAKE) -f CMakeFiles/main3.dir/build.make CMakeFiles/main3.dir/test/newTest2.cpp.o
+.PHONY : test/newTest2.cpp.o
+
+test/newTest2.i: test/newTest2.cpp.i
+
+.PHONY : test/newTest2.i
+
+# target to preprocess a source file
+test/newTest2.cpp.i:
+	$(MAKE) -f CMakeFiles/main3.dir/build.make CMakeFiles/main3.dir/test/newTest2.cpp.i
+.PHONY : test/newTest2.cpp.i
+
+test/newTest2.s: test/newTest2.cpp.s
+
+.PHONY : test/newTest2.s
+
+# target to generate assembly for a file
+test/newTest2.cpp.s:
+	$(MAKE) -f CMakeFiles/main3.dir/build.make CMakeFiles/main3.dir/test/newTest2.cpp.s
+.PHONY : test/newTest2.cpp.s
+
+test/newTestStellar.o: test/newTestStellar.cpp.o
+
+.PHONY : test/newTestStellar.o
+
+# target to build an object file
+test/newTestStellar.cpp.o:
+	$(MAKE) -f CMakeFiles/main2.dir/build.make CMakeFiles/main2.dir/test/newTestStellar.cpp.o
+.PHONY : test/newTestStellar.cpp.o
+
+test/newTestStellar.i: test/newTestStellar.cpp.i
+
+.PHONY : test/newTestStellar.i
+
+# target to preprocess a source file
+test/newTestStellar.cpp.i:
+	$(MAKE) -f CMakeFiles/main2.dir/build.make CMakeFiles/main2.dir/test/newTestStellar.cpp.i
+.PHONY : test/newTestStellar.cpp.i
+
+test/newTestStellar.s: test/newTestStellar.cpp.s
+
+.PHONY : test/newTestStellar.s
+
+# target to generate assembly for a file
+test/newTestStellar.cpp.s:
+	$(MAKE) -f CMakeFiles/main2.dir/build.make CMakeFiles/main2.dir/test/newTestStellar.cpp.s
+.PHONY : test/newTestStellar.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... edit_cache"
-	@echo "... main"
 	@echo "... rebuild_cache"
+	@echo "... edit_cache"
 	@echo "... Core"
+	@echo "... main"
+	@echo "... main3"
+	@echo "... main2"
 	@echo "... Global.o"
 	@echo "... Global.i"
 	@echo "... Global.s"
@@ -296,6 +378,12 @@ help:
 	@echo "... test/newTest.o"
 	@echo "... test/newTest.i"
 	@echo "... test/newTest.s"
+	@echo "... test/newTest2.o"
+	@echo "... test/newTest2.i"
+	@echo "... test/newTest2.s"
+	@echo "... test/newTestStellar.o"
+	@echo "... test/newTestStellar.i"
+	@echo "... test/newTestStellar.s"
 .PHONY : help
 
 

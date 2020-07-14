@@ -9,6 +9,7 @@
 #include "Topology.h"
 #include "Node.hpp"
 #include "Global.h"
+#include "Dij.hpp"
 
 class Config {
 private:
@@ -184,6 +185,7 @@ public:
         int committer = r_committer(Global::rng.get());
         for (auto &slice: this->nodes[committer].Slices) {
             for (auto &node: slice.members) {
+                if (this->nodes[node].Down)continue;
                 se.insert(node);
             }
         }
@@ -199,6 +201,7 @@ public:
         int ret = 0;
         for (int i = 0; i < nodes.size(); i++) {
             for (int j = 0; j < nodes.size(); j++) {
+                if (this->nodes[nodes[i]].Down || this->nodes[nodes[j]].Down)continue;
                 ret = std::max(ret, tp.AdjList[nodes[i]][nodes[j]]);
             }
         }
@@ -271,89 +274,43 @@ public:
                 if (nodes[i].Down != 1)
                     remain.insert(i);
 
-        //preprocess
-        int sliceID = 0;
-        for (auto idx: remain) {
-            for (auto &slice: nodes[idx].Slices) {
-                for (auto member: slice.members) {
-                    setMap[member].push_back(sliceID);
-                }
-                Slice.push_back(std::vector<int>(slice.members));
-                sliceRemain.push_back(slice.members.size());
-                idMap[sliceID++] = idx;
+        std::unordered_set<int> seGatheredWitness;
+        std::priority_queue<std::pair<int, int>> pq;
+        std::unordered_set<int> seWitness;
+        for (auto &it:witness) {
+            if (this->nodes[it].Down)continue;
+            seWitness.insert(it);
+        }
+        int maxTime = 0;
+
+        for (int i = 0; i < committee.size(); i++) {
+            if (seWitness.count(committee[i]))seGatheredWitness.insert(committee[i]);
+            for (int j = 0; j < witness.size(); j++) {
+                if (this->nodes[witness[j]].Down)continue;
+                pq.push({this->tp.AdjList[committee[i]][witness[j]], witness[j]});
             }
         }
 
-        timestampSlice.resize(sliceID);
-
-        std::vector<int> currentRound, nextRound;
-        for (auto it:committee) {
-            currentRound.push_back(it);
+        for (auto it:seGatheredWitness) {
+            seWitness.erase(it);
         }
-
-
-        while (currentRound.size()) {
-            //std::cout << currentRound.size() << std::endl;
-            for (auto it:currentRound) {
-                for (auto sID:setMap[it]) {
-                    int nodeID = idMap[sID];
-                    sliceRemain[sID]--;
-                    timestampSlice[sID] = std::max(this->tp.AdjList[it][idMap[sID]] + timestamp[it],
-                                                   timestampSlice[sID]);
-                    if (sliceRemain[sID] == 0) {
-                        nextRound.push_back(idMap[sID]);
-                        if (timestampSlice[sID] < timestamp[idMap[sID]]) {
-                            timestamp[idMap[sID]] = timestampSlice[sID];
-                            parent[idMap[sID]] = sID;
-                        }
-                    }
-                }
-            }
-            currentRound.swap(nextRound);
-            nextRound.clear();
-        }
-
-
-        std::set<int> seWitness;
-        for (auto &it:witness)seWitness.insert(it);
-
-        std::vector<int> refCnt;
-        refCnt.resize(this->nodecnt);
-
-        for (int i = 0; i < this->nodecnt; i++) {
-            int sID = parent[i];
-            if (sID == -1)continue;
-            for (auto &nID:Slice[sID]) {
-                refCnt[nID]++;
-            }
-        }
-        for (int i = 0; i < this->nodecnt; i++) {
-            if (refCnt[i] > this->nodes[i].bandWidth) {
-                timestamp[i] = (double) timestamp[i] * (refCnt[i] / (double) this->nodes[i].bandWidth);
+        while (pq.size() && (double) seGatheredWitness.size() < (double) witness.size() * fraction) {
+            auto now = pq.top();
+            pq.pop();
+            if (seGatheredWitness.count(now.second))continue;
+            seGatheredWitness.insert(now.second);
+            seWitness.erase(now.second);
+            maxTime += now.first;
+            for (auto it:seWitness) {
+                pq.push({this->tp.AdjList[now.second][it], it});
             }
         }
 
-        //calc the time we gather witness*fraction
-        std::vector<std::pair<int, int> > vCalcPri;
-        for (int i = 0; i < this->nodecnt; i++) {
-            vCalcPri.push_back({timestamp[i], i});
-        }
-
-        std::sort(vCalcPri.begin(), vCalcPri.end());
-        int now = 0, maxTime = 0;
-        for (auto &it:vCalcPri) {
-            //std::cout << it.first << "\t" << it.second << "\t" << seWitness.count(it.second) << "\t"
-            //          << refCnt[it.second]
-            //          << std::endl;
-            if (seWitness.count(it.second)) {
-                now++;
-                maxTime = std::max(maxTime, it.first);
-                if (now >= witness.size() * fraction)break;
-            }
-        }
+        if ((double) seGatheredWitness.size() < (double) witness.size() * fraction)
+            maxTime = INT_MAX;
 
         return {currentCommitter, maxTime,
-                static_cast<double>((timestamp.size() - std::count(timestamp.begin(), timestamp.end(), INT_MAX))),
+                -1,
                 GenerateRandomTradingInfo(mean_trading_count, stddev_trading_count, mean_trading_amount,
                                           stddev_trading_amount)};
     }

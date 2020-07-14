@@ -1,4 +1,6 @@
-/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles/main.dir
 /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles/edit_cache.dir
 /home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles/Core.dir
+/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles/main.dir
+/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles/main3.dir
+/home/misclicked/CLionProjects/SFBA-py/cpp/SFBA/cmake-build-debug/CMakeFiles/main2.dir

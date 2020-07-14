@@ -52,6 +52,7 @@ void Topology::Random(int nodes, int edges, int mean_latency_ms, int stddev_late
     this->edges = 0;
 
     std::normal_distribution<> r_latency(mean_latency_ms, stddev_latency_ms);
+    //std::uniform_int_distribution<> r_latency(mean_latency_ms, stddev_latency_ms);
     std::uniform_int_distribution<> r_node(0, nodes - 1);
     std::vector<std::vector<int>> t = Tree::Generate(nodes);
 
