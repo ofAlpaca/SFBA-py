@@ -14,7 +14,7 @@ public:
     std::mt19937 gen;
 
     Rng() {
-        gen = std::mt19937(std::chrono::steady_clock::now().time_since_epoch().count());
+        gen = std::mt19937(69420);
     }
 
     std::mt19937 &get() {

@@ -10,10 +10,10 @@
 class SFBA : public Config {
 public:
     //system parameter
-    int min_slices = 5;
-    int max_slices = 10;
-    int min_slice_member = 2;
-    int max_slice_member = 7;
+    double min_slices = 15;
+    double max_slices = 20;
+    double min_slice_member = 2;
+    double max_slice_member = 5;
     int mean_bandwidth = 15;
     int stddev_bandwidth = 10;
     int mean_trading_count = 1000;
@@ -25,13 +25,15 @@ public:
     double mean_failChance = 0.05;
     double stddev_failChance = 0.02;
     int witnessSize; //witness count
-    int Timeout = 3000;
+    int Timeout = 10000;
 
     std::vector<int> witness;
 
-    int round_per_epoch = 100;
+    int round_per_epoch = 300;
 
     float fraction_corrupted = 0.0;
+
+    int corruptedNode = 0;
 
     double decayRateMalice = 0.9;
     double decayRateCurrentMalice = 1;
@@ -56,7 +58,7 @@ public:
 
     double witnessFraction = 0.5;
 
-    SFBA(Topology tp) : Config(tp) {
+    SFBA(Topology tp, int nodecnt) : Config(tp, nodecnt) {
     };
 
     double getNodeMalice(int from, int to) {
@@ -77,145 +79,6 @@ public:
         return this->nodes[id].stake;
     }
 
-    void
-    RandomizeSlicesInFlavorOfMaliceAndBandwidth(int min_slices, int max_slices, int min_slice_member,
-                                                int max_slice_member) {
-        min_slice_member = std::max(min_slice_member, 1);
-        max_slice_member = std::max(max_slice_member, 1);
-        std::uniform_int_distribution<> r_slices(min_slices, max_slices);
-        std::uniform_int_distribution<> r_slices_member(min_slice_member, max_slice_member);
-        std::uniform_int_distribution<> r_node(0, this->nodecnt - 1);
-        std::vector<int> vec;
-        for (int i = 0; i < nodecnt; i++) {
-            vec.push_back(i);
-        }
-        for (int i = 0; i < nodecnt; i++) {
-            //nodes[i].Slices.resize(slicescnt);
-            std::vector<std::vector<int>> _slices;
-            std::vector<double> cost, value;
-            std::vector<std::pair<double, int>> sliceSort;
-            for (int j = 0; j < this->nodecnt * 10; j++) {
-                int sliceMember = r_slices_member(Global::rng.get());
-                Slice slice;
-                for (int k = 0; k < sliceMember; k++) {
-                    int nodeID;
-                    do {
-                        nodeID = r_node(Global::rng.get());
-                    } while (nodeID == i);
-                    slice.members.push_back(nodeID);
-                }
-                _slices.push_back(slice.members);
-                slice.members.push_back(i);
-                value.push_back(innerCommunicateTime(slice.members));
-                sliceSort.push_back({value[j], j});
-            }
-            sort(sliceSort.begin(), sliceSort.end());
-            int sliceCnt = r_slices(Global::rng.get());
-            for (int j = 0; j < sliceCnt; j++) {
-                Slice tmp;
-                tmp.members.swap(_slices[sliceSort[j].second]);
-                this->nodes[i].Slices.push_back(tmp);
-            }
-        }
-    }
-
-    void updateProbOfMalice(TradeInfo &tradingInfo) {
-        //calc everyone's stake proportion
-        long long int stakeMax(0);
-        for (int i = 0; i < this->nodecnt; i++) {
-            stakeMax = std::max((long long int) getNodeStake(i), stakeMax);
-        }
-        std::vector<double> stakePorportion;
-        stakePorportion.resize(this->nodecnt, 0.0);
-        for (int i = 0; i < this->nodecnt; i++) {
-            stakePorportion[i] = (double) getNodeStake(i) / stakeMax;
-        }
-
-        honestPre.swap(honestNow);
-        for (int i = 0; i < this->nodecnt; i++) {
-            for (int j = 0; j < this->nodecnt; j++) {
-                if (this->blockHeight == 1)
-                    honestNow[i][j] = decayRateMalice * (false ? (0 + stakePorportion[j]) : 1) * honestPre[i][j] + 1;
-                else
-                    honestNow[i][j] =
-                            decayRateMalice * (false ? (0 + stakePorportion[j]) : 1) * honestPre[i][j] +
-                            ((tradingInfo.count({i, j})) || (tradingInfo.count({j, i})) ? 1.0 : 0.0);
-            }
-        }
-        decayRateSumMalice += decayRateCurrentMalice;
-        decayRateCurrentMalice *= decayRateMalice;
-    }
-
-    void updateProbOfFaliure(TradeInfo &tradingInfo) {
-        //calc everyone's bandWidth proportion
-        long long int bandWidthMax(0);
-        for (int i = 0; i < this->nodecnt; i++) {
-            bandWidthMax = std::max((long long int) getNodeBandwidth(i), bandWidthMax);
-        }
-        std::vector<double> bandWidthPorportion;
-        bandWidthPorportion.resize(this->nodecnt, 0.0);
-        for (int i = 0; i < this->nodecnt; i++) {
-            bandWidthPorportion[i] = getNodeBandwidth(i) / bandWidthMax;
-        }
-
-        //calc who's currently in round]
-        std::set<int> currentInRound;
-        for (auto &it:tradingInfo) {
-            currentInRound.insert(it.from);
-        }
-
-        availablePre.swap(availableNow);
-        for (int i = 0; i < this->nodecnt; i++) {
-            if (this->blockHeight == 1)
-                availableNow[i] = decayRateFailure * (false ? bandWidthPorportion[i] : 1) * availablePre[i] +
-                                  1;
-            else
-                availableNow[i] = decayRateFailure * (false ? bandWidthPorportion[i] : 1) * availablePre[i] +
-                                  (currentInRound.count(i)) ? 1.0 : 0.0;
-        }
-        decayRateSumFailure += decayRateCurrentFailure;
-        decayRateCurrentFailure *= decayRateFailure;
-    }
-
-    void updateSlices() {
-        for (int i = 0; i < this->nodecnt; i++) {
-            std::vector<Slice> nextSlice, nextSlice2;
-            for (auto &slice: this->nodes[i].Slices) {
-                double probOfNotDeceive = 1;
-                for (auto member: slice.members) {
-                    probOfNotDeceive *= 1 - getNodeMalice(i, member);
-                }
-                if (1 - probOfNotDeceive <= thresholdDeceive[i]) {
-                    nextSlice.push_back(slice);
-                }
-            }
-            std::unordered_set<int> blockingSet;
-            for (int j = 0; j < nextSlice.size(); j++) {
-                std::unordered_set<int> tmp(blockingSet);
-                if (tmp.size() == 0) {
-                    for (auto it:nextSlice[j].members)tmp.insert(it);
-                } else {
-                    for (auto it:nextSlice[j].members)tmp.erase(it);
-                }
-                double probOfNotBlock = 1;
-                for (auto it:tmp) {
-                    probOfNotBlock *= 1 - getNodeFailChance(it);
-                }
-                if (1 - probOfNotBlock <= thresholdBlocking[i]) {
-                    blockingSet.swap(tmp);
-                    nextSlice2.push_back(nextSlice[j]);
-                }
-            }
-            this->nodes[i].Slices.swap(nextSlice2);
-        }
-    }
-
-    void releaseThreshold(double releaseRateDeceive = 2.0, double releaseRateBlocking = 2.0) {
-        for (int i = 0; i < this->nodecnt; i++) {
-            thresholdDeceive[i] = std::min(thresholdDeceive[i] * releaseRateDeceive, 1.1);
-            thresholdBlocking[i] = std::min(thresholdBlocking[i] * releaseRateBlocking, 1.1);
-        }
-    }
 
     void ToggleSpecialNodeDown(float fraction) {
         assert(fraction <= 1.0);
@@ -232,7 +95,10 @@ public:
     }
 
     void Bootstrap() override {
-        witnessSize = this->nodecnt * witnessFraction;
+        //witnessSize = this->nodecnt * witnessFraction;
+        //witnessSize = 10;
+        this->min_slices = this->nodecnt * 0.075;
+        this->max_slices = this->nodecnt * 0.1;
         this->blockHeight = 1;
         honestNow.resize(nodecnt);
         for (auto &it:honestNow)it.resize(nodecnt, 0);
@@ -248,58 +114,96 @@ public:
         confTimeCnt = 0;
         RandomizeNodeStake(mean_stake, stddev_stake);
         RandomizeNodeBandwidth(mean_bandwidth, stddev_bandwidth);
-        RandomizeSlicesInFlavorOfMaliceAndBandwidth(min_slices, max_slices, min_slice_member, max_slice_member);
+        RandomizeSlices(min_slices, max_slices, min_slice_member, max_slice_member);
     };
+    double slicesBuff = 1.0;
+    double slice_memberBuff = 1.0;
+
+    void Rearrenge() {
+        if (confTimeSum + this->Timeout < 0) {
+            assert(false);
+        }
+        confTimeSum += this->Timeout;
+        confTimeCnt++;
+        std::cerr << this->corruptedNode << std::endl;
+        RandomizeSlices(min_slices * slicesBuff, max_slices * slicesBuff, min_slice_member * slice_memberBuff,
+                        max_slice_member * slice_memberBuff);
+    }
 
     void Run(int epoch) override {
-        long long int Sum = 0;
-        for (int __i = 0; __i < epoch; __i++) {
+        confTimeCnt = 0;
+        confTimeSum = 0;
+        std::vector<int> nowWitness;
+
+        int shouldRun = epoch * round_per_epoch;
+
+        for (int __i = 0; confTimeCnt < shouldRun; __i++) {
+            ToggleAllNodeUp();
+            ToggleRandomNodeDown(corruptedNode);
             this->epoch.clear();
-            witness = getRandomNodes(witnessSize);
-            double SliceTimeA, SliceTimeB;
-            SliceTimeA = SliceTimeB = 1.0;
-            RandomizeSlicesInFlavorOfMaliceAndBandwidth(min_slices, max_slices, min_slice_member, max_slice_member);
+            info rearrengeRound;
+            int innerTime;
+            std::vector<int> committee;
+            slicesBuff = 1.0;
+            slice_memberBuff = 1.0;
+            while (true) {
+                witness = getRandomNodes(witnessSize);
+                committee = getRandomCommittee(25);
+                innerTime = innerCommunicateTime(committee);
+                //auto committee2 = getRandomCommittee(30, true);
+                //int innerTime2 = innerCommunicateTime(committee2);
+                rearrengeRound = StartGatherWitness(committee, witness, 0.5);
+                if (rearrengeRound.roundTime <= 66666) {
+                    break;
+                } else {
+                    slicesBuff *= 1.05;
+                    slice_memberBuff *= 0.95;
+                    Rearrenge();
+                }
+            }
+            rearrengeRound.roundTime += innerTime;
+            if (confTimeSum + rearrengeRound.roundTime < 0) {
+                assert(false);
+            }
+            confTimeSum += rearrengeRound.roundTime;
+            confTimeCnt++;
+            nowWitness.clear();
+            for (int i = 0; i < rearrengeRound.gatheredWitness.size(); i++) {
+                nowWitness.push_back(rearrengeRound.gatheredWitness[i].first);
+            }
             for (int __i_ = 0; __i_ < round_per_epoch; __i_++, this->blockHeight++) {
                 ToggleAllNodeUp();
-                ToggleRandomNodeDown(fraction_corrupted);
-                //ToggleSpecialNodeDown(fraction_corrupted);
-                auto committee = getRandomCommittee();
-                int innerLatency = innerCommunicateTime(committee);
-                //auto committee2 = getRandomNodes(committee.size());
-                //int innerLatency2 = innerCommunicateTime(committee2);
-                info currentRound = StartGatherWitness(committee, witness, 0.5, mean_trading_count,
-                                                       stddev_trading_count, mean_trading_amount,
-                                                       stddev_trading_amount);
-                if (currentRound.roundTime == INT_MAX) {
-                    currentRound.roundTime = Timeout;
-                    currentRound.roundWinner = -1;
-                    SliceTimeA *= 1.05;
-                    SliceTimeB *= 0.95;
-                    RandomizeSlicesInFlavorOfMaliceAndBandwidth(min_slices * SliceTimeA, max_slices * SliceTimeA,
-                                                                min_slice_member * SliceTimeB,
-                                                                max_slice_member * SliceTimeB);
-                    confTimeSum += currentRound.roundTime;
+                ToggleRandomNodeDown(corruptedNode);
+                std::vector<int> tmp;
+                tmp.resize(nowWitness.size(), INT_MAX);
+                for (auto u:committee) {
+                    if (this->nodes[u].Down)continue;
+                    for (int i = 0; i < nowWitness.size(); i++) {
+                        int v = nowWitness[i];
+                        if (this->nodes[v].Down)continue;
+                        tmp[i] = std::min(tmp[i], this->tp.AdjList[u][v]);
+                    }
+                }
+                std::sort(tmp.begin(), tmp.end());
+                int confirmTime = 0;
+                for (int i = 0; i < nowWitness.size() * 0.5; i++) {
+                    if (tmp[i] == INT_MAX) {
+                        confirmTime = this->Timeout;
+                        break;
+                    }
+                    confirmTime += tmp[i];
+                }
+                if (confirmTime != this->Timeout) {
+                    confirmTime += innerCommunicateTime(committee) / 2;
+                    if (confTimeSum + confirmTime < 0) {
+                        assert(false);
+                    }
+                    confTimeSum += confirmTime;
                     confTimeCnt++;
                 } else {
-                    currentRound.roundTime += innerLatency;
-                    confTimeSum += currentRound.roundTime;
-                    confTimeCnt++;
+                    break;
                 }
-                Sum += currentRound.roundTime;
-                std::cout << this->fraction_corrupted << "\t" << this->blockHeight << "\t" << currentRound.roundTime
-                          << "\t" << Sum
-                          << std::endl;
-                this->epoch.push_back(currentRound);
             }
-            //info syncRound;
-            //syncRound.roundWinner = 0;
-            //syncRound.roundTime = innerCommunicateTime(getRandomNodes(this->nodecnt));
-            //Sum += syncRound.roundTime;
-            //this->epoch.push_back(syncRound);
-            //this->blockHeight++;
-            //std::cout << this->fraction_corrupted << "\t" << this->blockHeight << "\t" << syncRound.roundTime << "\t"
-            //          << Sum
-            //          << std::endl;
             Ledger.push_back(this->epoch);
         }
     };

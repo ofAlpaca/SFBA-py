@@ -5,31 +5,28 @@
 
 using namespace std;
 
-int nodes = 200;
-int edges = nodes * 4;
 
 double corrupted = 0.0;
 double witnessFraction = 0.01;
 int hi = 0;
 
 int main() {
-    freopen("RandomAttack.txt", "w", stdout);
+    freopen("Corrupted.txt", "w", stdout);
     freopen("debug.txt", "w", stderr);
-    Topology tp;
 
-    tp.Random(nodes, edges, 20, 10);
-    tp.GenerateAllPairShortestPath();
 
-    while (corrupted <= 1.01) {
-        SFBA sfba(tp);
+    for (int nodes = 50; nodes <= 1000; nodes += 50) {
+        Topology tp;
+        tp.Random(nodes, 1, 8, 0);
+        tp.GenerateAllPairShortestPath();
+        SFBA sfba(tp, nodes);
 
-        sfba.fraction_corrupted = corrupted;
-        sfba.witnessFraction = witnessFraction;
+        sfba.corruptedNode = 0;
+        sfba.witnessSize = 5;
 
 
         sfba.Bootstrap();
-        sfba.Run(3);
-        cerr << corrupted << "\t" << sfba.getAvaCFT() << endl;
-        corrupted += 0.05;
+        sfba.Run(50);
+        cout << fixed << nodes << "\t" << sfba.getAvaCFT() << endl;
     }
 }

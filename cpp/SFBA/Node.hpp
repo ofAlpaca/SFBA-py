@@ -9,22 +9,15 @@
 #include <vector>
 #include "Slice.h"
 
-enum NodeStatus {
-    Vote, Accept, Commit
-};
 
 class Node {
 public:
     std::vector<Slice> Slices;
-    int inputState;
-    int outputState;
     int Down;
     int bandWidth;
     int stake;
-    NodeStatus internalState;
 
     Node() {
-        internalState = Vote;
         Down = 0;
         stake = 0;
         bandWidth = INT_MAX;

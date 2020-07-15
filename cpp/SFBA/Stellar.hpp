@@ -10,91 +10,98 @@
 class Stellar : public Config {
 public:
     //system parameter
-    int min_slices = 8;
-    int max_slices = 12;
-    int mean_bandwidth = 12;
-    int stddev_bandwidth = 1;
-    int mean_trading_count = 100;
+    double min_slices = 15;
+    double max_slices = 20;
+    double min_slice_member = 2;
+    double max_slice_member = 5;
+    int mean_bandwidth = 15;
+    int stddev_bandwidth = 10;
+    int mean_trading_count = 1000;
     int stddev_trading_count = 10;
     int mean_trading_amount = 10;
     int stddev_trading_amount = 5;
     int mean_stake = 1000;
     int stddev_stake = 200;
+    double mean_failChance = 0.05;
+    double stddev_failChance = 0.02;
     int witnessSize; //witness count
-    int Timeout = 1000;
+    int Timeout = 3000;
 
     std::vector<int> witness;
-    std::vector<int> committee;
 
-    int round_per_epoch = 1000;
+    int round_per_epoch = 10;
 
     float fraction_corrupted = 0.0;
 
-    int min_trust_slices_member = 1;
-    int max_trust_slices_member = 1;
-    int min_trust_slice_number = 5;
-    int max_trust_slice_number = 7;
-    int min_slice_redundant = 2;
-    int max_slice_redundant = max_slices - max_trust_slice_number;
+    double confTimeSum = 0;
+    double confTimeCnt = 0;
+
+
+    double getAvaCFT() {
+        return confTimeSum / confTimeCnt;
+    }
 
     std::vector<double> thresholdDeceive, thresholdBlocking;
     std::vector<std::vector<double>> honestNow, honestPre;
     std::vector<double> availableNow, availablePre;
 
 
-    Stellar(Topology tp) : Config(tp) {
-        witnessSize = this->nodecnt;
-        max_slice_redundant = max_slices - max_trust_slice_number;
+    double witnessFraction = 0.5;
+
+    Stellar(Topology tp, int nodecnt) :
+            Config(tp, nodecnt) {
     };
 
+    int getNodeStake(int id) {
+        return this->nodes[id].stake;
+    }
+
+    void ToggleSpecialNodeDown(float fraction) {
+        assert(fraction <= 1.0);
+        std::vector<int> shaker;
+        for (int i = 0; i < this->witnessSize; i++) {
+            shaker.push_back(this->witness[i]);
+        }
+        std::random_shuffle(shaker.begin(), shaker.end());
+        this->downed = 0;
+        for (int i = 0; i < nodecnt * fraction; i++) {
+            nodes[shaker[i]].Down = 1;
+            this->downed++;
+        }
+    }
 
     void Bootstrap() override {
-        this->blockHeight = 1;
-        honestNow.resize(nodecnt);
-        for (auto &it:honestNow)it.resize(nodecnt, 0);
-        honestPre.resize(nodecnt);
-        for (auto &it:honestPre)it.resize(nodecnt);
-        availableNow.resize(nodecnt, 0);
-        availablePre.resize(nodecnt);
-        thresholdDeceive.resize(this->nodecnt, 0.6);   // init x: can afford x% of chance being blocked
-        thresholdBlocking.resize(this->nodecnt, 0.6); // init x: can afford x% of chance being blocked
-        witness = getRandomNodes(witnessSize);
-        committee = getRandomNodes(30);
-        Ledger.clear();
-        RandomizeNodeStake(mean_stake, stddev_stake);
-        RandomizeNodeBandwidth(mean_bandwidth, stddev_bandwidth);
-        LetWeTrustThese(committee, min_slices, max_slices, min_trust_slices_member, max_trust_slices_member,
-                        min_trust_slice_number, max_trust_slice_number,
-                        min_slice_redundant, max_slice_redundant);
     };
 
+    void Rearrenge() {
+        confTimeSum += this->Timeout;
+        confTimeCnt++;
+        min_slices *= 1.1;
+        max_slices *= 1.1;
+        min_slice_member *= 0.9;
+        max_slice_member *= 0.9;
+        RandomizeSlices(min_slices, max_slices, min_slice_member, max_slice_member);
+    }
+
     void Run(int epoch) override {
-        std::normal_distribution<> r_stake(5, 2);
+        confTimeCnt = 0;
+        confTimeSum = 0;
+        std::vector<int> nowWitness;
+
         for (int __i = 0; __i < epoch; __i++) {
             this->epoch.clear();
+            info rearrengeRound;
+            int innerTime;
+            std::vector<int> committee;
             for (int __i_ = 0; __i_ < round_per_epoch; __i_++, this->blockHeight++) {
-                ToggleAllNodeUp();
-                ToggleRandomNodeDown(fraction_corrupted);
-                int innerLatency = innerCommunicateTime(committee);
-                innerLatency += r_stake(Global::rng.get());
-                info currentRound = StartGatherWitness(committee, witness, 0.5, mean_trading_count,
-                                                       stddev_trading_count, mean_trading_amount,
-                                                       stddev_trading_amount);
-                if (currentRound.roundTime == INT_MAX) {
-                    currentRound.roundTime = innerLatency + Timeout;
-                    currentRound.roundWinner = -1;
-                }
-                std::cout << this->blockHeight << "\t" << currentRound.roundTime + innerLatency << "\t"
-                          << this->nodecnt - this->downed
-                          << "\t"
-                          << this->nodecnt - this->downed - currentRound.successFraction
-                          << std::endl;
-                //updateSlices();
-                this->epoch.push_back(currentRound);
+                committee = getRandomCommittee((double) this->nodecnt * (2 / 3.0), true);
+                innerTime = innerCommunicateTime(committee);
+                confTimeSum += innerTime;
+                confTimeCnt++;
             }
             Ledger.push_back(this->epoch);
         }
     };
 };
 
-#endif //SFBA_STELLAR_HPP
+#endif //SFBA_SFBA_HPP

@@ -30,3 +30,24 @@ set_target_properties(main3 PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURC
 add_executable(main2 test/newTestStellar.cpp)
 target_link_libraries(main2 Core)
 set_target_properties(main2 PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}")
+
+
+add_executable(caf test/cascadingFailure.cpp)
+target_link_libraries(caf Core)
+set_target_properties(caf PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}")
+
+add_executable(10witness test/10witness.cpp)
+target_link_libraries(10witness Core)
+set_target_properties(10witness PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}")
+
+add_executable(25witness test/25witness.cpp)
+target_link_libraries(25witness Core)
+set_target_properties(25witness PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}")
+
+add_executable(50witness test/50witness.cpp)
+target_link_libraries(50witness Core)
+set_target_properties(50witness PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}")
+
+add_executable(100witness test/100witness.cpp)
+target_link_libraries(100witness Core)
+set_target_properties(100witness PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}")

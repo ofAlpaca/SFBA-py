@@ -5,33 +5,28 @@
 
 using namespace std;
 
-int nodes = 200;
-int edges = nodes * 4;
 
+double corrupted = 0.0;
+double witnessFraction = 0.01;
 int hi = 0;
 
 int main() {
-    freopen("debug2.txt", "w", stdout);
-    freopen("Witness.txt", "w", stderr);
+    freopen("PerformenceStllar.txt", "w", stdout);
+    freopen("debug.txt", "w", stderr);
 
-    for (int stddev = 0; stddev <= 20; stddev++) {
+#pragma omp parallel for default(none)
+    for (int nodes = 100; nodes <= 1000; nodes += 100) {
         Topology tp;
-
-        tp.Random(nodes, edges, 20, stddev);
+        tp.Random(nodes, nodes * 3, 8, 0);
         tp.GenerateAllPairShortestPath();
-        for (double corrupted = 0.0; corrupted <= 1.01; corrupted += 0.05) {
-            for (double witnessFraction = 0.0; witnessFraction <= 1.01; witnessFraction += 0.05) {
-                SFBA sfba(tp);
+        Stellar stellar(tp, nodes);
 
-                sfba.fraction_corrupted = corrupted;
-                sfba.witnessFraction = witnessFraction;
+        stellar.fraction_corrupted = corrupted;
+        stellar.witnessFraction = witnessFraction;
 
 
-                sfba.Bootstrap();
-                sfba.Run(5);
-                cerr << stddev << "\t" << witnessFraction << "\t" << corrupted << "\t" << sfba.getAvaCFT() << endl;
-            }
-        }
-
+        stellar.Bootstrap();
+        stellar.Run(1);
+        cout << nodes << "\t" << stellar.getAvaCFT() << endl;
     }
 }

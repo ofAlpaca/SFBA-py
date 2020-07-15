@@ -28,11 +28,7 @@ public:
     }
 
     int Find(int x) {
-        while (parent[x] != x) {
-            parent[x] = parent[parent[x]];
-            x = parent[x];
-        }
-        return parent[x];
+        return parent[x] == x ? x : parent[x] = Find(parent[x]);
     }
 
     void Union(int x, int y) {

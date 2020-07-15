@@ -67,7 +67,7 @@ void Topology::Random(int nodes, int edges, int mean_latency_ms, int stddev_late
         }
     }
 
-    int remain = edges - this->edges;
+    int remain = edges;
 
     std::set<std::pair<int, int>> se;
 

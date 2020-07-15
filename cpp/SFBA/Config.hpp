@@ -22,25 +22,22 @@ public:
         return std::pair<int, int>(a.from, a.to) < std::pair<int, int>(b.from, b.to);
     })> TradeInfo;
     struct info {
-        int roundWinner;
         int roundTime;
-        double successFraction;
-        TradeInfo tradingInfo;
+        std::vector<std::pair<int, int> > gatheredWitness;
     };
     Topology tp;
     std::vector<Node> nodes;
     std::vector<std::vector<info> > Ledger;
     std::vector<info> epoch; //this round
-    int nodecnt, edgecnt;
+    int nodecnt;
     int blockHeight;
     int currentCommitter;
     int downed;
 
 
-    Config(Topology &tp) {
+    Config(Topology &tp, int nodecnt) {
         this->tp = tp;
-        nodecnt = this->tp.nodes;
-        edgecnt = this->tp.edges;
+        this->nodecnt = nodecnt;
         blockHeight = 0;
         nodes.resize(nodecnt);
     }
@@ -86,15 +83,14 @@ public:
         return set_trade;
     }
 
-    void ToggleRandomNodeDown(float fraction) {
-        assert(fraction <= 1.0);
+    void ToggleRandomNodeDown(int size) {
         std::vector<int> shaker;
         for (int i = 0; i < nodecnt; i++) {
             shaker.push_back(i);
         }
         std::random_shuffle(shaker.begin(), shaker.end());
         this->downed = 0;
-        for (int i = 0; i < nodecnt * fraction; i++) {
+        for (int i = 0; i < size; i++) {
             nodes[shaker[i]].Down = 1;
             this->downed++;
         }
@@ -120,10 +116,13 @@ public:
         std::uniform_int_distribution<> r_slice_redundant(min_slice_redundant, max_slice_redundant);
         std::uniform_int_distribution<> r_slice_others(min_slice_redundant + min_trust_inside_watcher,
                                                        max_slice_redundant + max_trust_inside_watcher);
+        std::uniform_int_distribution<> r_Special(0,
+                                                  10);
         std::vector<int> others;
         for (int i = 0; i < nodecnt; i++) {
             others.push_back(i);
         }
+        std::vector<int> special(watcher);
         for (int it = 0; it < nodecnt; it++) {
             int slices = r_slices(Global::rng.get());
             int trustslices = r_trust_slices(Global::rng.get());
@@ -131,8 +130,14 @@ public:
             for (int i = 0; i < trustslices; i++) {
                 int trust_inside_watcher = r_trust_inside_watcher(Global::rng.get());
                 std::random_shuffle(watcher.begin(), watcher.end());
-                for (int j = 0; j < trust_inside_watcher; j++) {
-                    nodes[it].Slices[i].members.push_back(watcher[j]);
+                if (r_Special(Global::rng.get())) {
+                    for (int j = 0; j < 2; j++) {
+                        nodes[it].Slices[i].members.push_back(special[j]);
+                    }
+                } else {
+                    for (int j = 0; j < trust_inside_watcher; j++) {
+                        nodes[it].Slices[i].members.push_back(watcher[j]);
+                    }
                 }
             }
             for (int i = trustslices; i < trustslices + slices; i++) {
@@ -147,24 +152,44 @@ public:
     }
 
 
-    void RandomizeSlices(int min_slices, int max_slices, int min_slice_member, int max_slice_member) {
+    void RandomizeSlices(unsigned int min_slices, unsigned int max_slices, unsigned int min_slice_member,
+                         unsigned int max_slice_member) {
         assert(max_slice_member < nodecnt);
+        min_slices = std::min(min_slices, static_cast<unsigned int>(1000));
+        max_slices = std::min(max_slices, static_cast<unsigned int>(1000));
+        min_slice_member = std::max(min_slice_member, static_cast<unsigned int>(1));
+        max_slice_member = std::max(max_slice_member, static_cast<unsigned int>(1));
         std::uniform_int_distribution<> r_slices(min_slices, max_slices);
         std::uniform_int_distribution<> r_slice_member(min_slice_member, max_slice_member);
         std::vector<int> vec;
+        std::vector<std::pair<int, std::vector<int>>> sliceSort;
         for (int i = 0; i < nodecnt; i++) {
             vec.push_back(i);
         }
         for (int i = 0; i < nodecnt; i++) {
             int slicescnt = r_slices(Global::rng.get());
-            nodes[i].Slices.resize(slicescnt);
+            sliceSort.clear();
             for (int j = 0; j < slicescnt; j++) {
-                int slicecnt = r_slice_member(Global::rng.get());
                 std::random_shuffle(vec.begin(), vec.end());
-                for (int k = 0; k < slicecnt; k++) {
-                    if (vec[k] == i)nodes[i].Slices[j].members.push_back(vec.back());
-                    else nodes[i].Slices[j].members.push_back(vec[k]);
+                int slicemember = r_slice_member(Global::rng.get());
+                std::vector<int> current;
+                for (int k = 0; current.size() < slicemember; k++) {
+                    if (vec[k] == i) {
+                        continue;
+                    }
+                    current.push_back(vec[k]);
                 }
+                if (current.size() == 0) {
+                    assert(true);
+                }
+                sliceSort.push_back({innerCommunicateTime(current), current});
+            }
+            std::sort(sliceSort.begin(), sliceSort.end());
+            this->nodes[i].Slices.clear();
+            for (int j = 0; j < slicescnt; j++) {
+                Slice s;
+                s.members.swap(sliceSort[j].second);
+                this->nodes[i].Slices.push_back(s);
             }
         }
     }
@@ -178,22 +203,45 @@ public:
         return std::vector<int>(vec.begin(), vec.begin() + n);
     }
 
-    std::vector<int> getRandomCommittee() {
+    std::vector<int> getRandomCommittee(int n, bool bad = false) {
         std::vector<int> vec;
         std::set<int> se;
         std::uniform_int_distribution<> r_committer(0, this->nodecnt - 1);
-        int committer = r_committer(Global::rng.get());
-        for (auto &slice: this->nodes[committer].Slices) {
-            for (auto &node: slice.members) {
-                if (this->nodes[node].Down)continue;
-                se.insert(node);
+        std::vector<int> all;
+        for (int i = 0; i < this->nodecnt; i++)
+            all.push_back(i);
+        std::vector<int> winner;
+        std::vector<std::pair<int, std::vector<int>>> loser;
+        int best = INT_MAX;
+        int round = this->nodecnt * 10;
+        if (n == this->nodecnt)round = 1;
+        if (bad) {
+            round = 1;
+        }
+        for (int i = 0; i < round; i++) {
+            std::random_shuffle(all.begin(), all.end());
+            vec.clear();
+            for (int j = 0; j < n; j++) {
+                vec.push_back(all[j]);
+            }
+            int now = innerCommunicateTime(vec);
+            if (bad) {
+                std::vector<int> vec2(vec);
+                loser.push_back({now, vec2});
+            }
+            //std::cout << now << std::endl;
+            if (now < best) {
+                best = now;
+                winner.swap(vec);
             }
         }
-        for (auto it:se) {
-            vec.push_back(it);
+        if (!bad)
+            return winner;
+        else {
+            std::sort(loser.begin(), loser.end());
+            return loser[loser.size() / 2].second;
         }
-        currentCommitter = committer;
-        return vec;
+
     }
 
 
@@ -202,6 +250,9 @@ public:
         for (int i = 0; i < nodes.size(); i++) {
             for (int j = 0; j < nodes.size(); j++) {
                 if (this->nodes[nodes[i]].Down || this->nodes[nodes[j]].Down)continue;
+                if (tp.AdjList[nodes[i]][nodes[j]] == INT_MAX) {
+                    assert(false);
+                }
                 ret = std::max(ret, tp.AdjList[nodes[i]][nodes[j]]);
             }
         }
@@ -230,9 +281,107 @@ public:
         }
     }
 
+    int CascadingFailure(std::vector<int> committee, std::vector<int> DownedNode) {
+        std::vector<int> tmpCommittee;
+
+        std::vector<int> timestamp;
+        std::vector<int> timestampSlice;
+        std::vector<int> parent;            //which slice node ref this round
+        std::vector<int> penalty;           //penalty when reached node.bandWidth
+        std::vector<int> capacity;           //used to calc current bandwidth
+        std::vector<int> sliceRemain;
+        std::vector<std::vector<int> > Slice;
+        std::unordered_set<int> remain;
+        std::unordered_set<int> seCommittee;
+        std::vector<std::vector<int>> setMap;   //N way list to reduce
+        std::unordered_map<int, int> idMap; // transfer slice id to real id
+
+        timestamp.resize(this->nodecnt, INT_MAX);
+        penalty.resize(this->nodecnt);
+        setMap.resize(this->nodecnt);
+        capacity.resize(this->nodecnt);
+        parent.resize(this->nodecnt, -1);
+
+        ToggleAllNodeUp();
+        for (auto it:DownedNode) {
+            this->nodes[it].Down = true;
+        }
+
+        //clear out "down" nodes
+        tmpCommittee.swap(committee);
+        for (auto it:tmpCommittee)
+            if (nodes[it].Down != 1)
+                committee.push_back(it);
+
+        //initialize timestamp
+        for (auto it:committee)
+            timestamp[it] = 0;
+
+        //gather remaining nodes
+        for (auto it:committee)
+            seCommittee.insert(it);
+        for (int i = 0; i < nodecnt; i++)
+            if (!seCommittee.count(i))
+                if (nodes[i].Down != 1)
+                    remain.insert(i);
+
+        //preprocess
+        int sliceID = 0;
+        for (auto idx: remain) {
+            for (auto &slice: nodes[idx].Slices) {
+                for (auto member: slice.members) {
+                    setMap[member].push_back(sliceID);
+                }
+                Slice.push_back(std::vector<int>(slice.members));
+                sliceRemain.push_back(slice.members.size());
+                idMap[sliceID++] = idx;
+            }
+        }
+
+        timestampSlice.resize(sliceID);
+
+        std::vector<int> currentRound, nextRound;
+        for (auto it:committee) {
+            currentRound.push_back(it);
+        }
+
+
+        while (currentRound.size()) {
+            //std::cout << currentRound.size() << std::endl;
+            for (auto it:currentRound) {
+                for (auto sID:setMap[it]) {
+                    sliceRemain[sID]--;
+                    timestampSlice[sID] = std::max(this->tp.AdjList[it][idMap[sID]] + timestamp[it],
+                                                   timestampSlice[sID]);
+                    if (sliceRemain[sID] == 0) {
+                        nextRound.push_back(idMap[sID]);
+                        if (timestampSlice[sID] < timestamp[idMap[sID]]) {
+                            timestamp[idMap[sID]] = timestampSlice[sID];
+                            parent[idMap[sID]] = sID;
+                        }
+                    }
+                }
+            }
+            currentRound.swap(nextRound);
+            nextRound.clear();
+        }
+
+
+        //calc the time we gather witness*fraction
+        int output = 0;
+        for (int i = 0; i < this->nodecnt; i++) {
+            if (timestamp[i] == INT_MAX) {
+                output++;
+            }
+        }
+
+
+        return output;
+
+    }
+
     info
-    StartGatherWitness(std::vector<int> committee, std::vector<int> witness, float fraction, int mean_trading_count,
-                       int stddev_trading_count, int mean_trading_amount, int stddev_trading_amount) {
+    StartGatherWitness(std::vector<int> committee, std::vector<int> witness, float fraction) {
         assert(fraction <= 1.0);
         assert(fraction >= 0);
         std::vector<int> tmpCommittee;
@@ -274,45 +423,88 @@ public:
                 if (nodes[i].Down != 1)
                     remain.insert(i);
 
-        std::unordered_set<int> seGatheredWitness;
-        std::priority_queue<std::pair<int, int>> pq;
-        std::unordered_set<int> seWitness;
-        for (auto &it:witness) {
-            if (this->nodes[it].Down)continue;
-            seWitness.insert(it);
-        }
-        int maxTime = 0;
-
-        for (int i = 0; i < committee.size(); i++) {
-            if (seWitness.count(committee[i]))seGatheredWitness.insert(committee[i]);
-            for (int j = 0; j < witness.size(); j++) {
-                if (this->nodes[witness[j]].Down)continue;
-                pq.push({this->tp.AdjList[committee[i]][witness[j]], witness[j]});
+        //preprocess
+        int sliceID = 0;
+        for (auto idx: remain) {
+            for (auto &slice: nodes[idx].Slices) {
+                for (auto member: slice.members) {
+                    setMap[member].push_back(sliceID);
+                }
+                Slice.push_back(std::vector<int>(slice.members));
+                sliceRemain.push_back(slice.members.size());
+                idMap[sliceID++] = idx;
             }
         }
 
-        for (auto it:seGatheredWitness) {
-            seWitness.erase(it);
+        timestampSlice.resize(sliceID);
+
+        std::vector<int> currentRound, nextRound;
+        for (auto it:committee) {
+            currentRound.push_back(it);
         }
-        while (pq.size() && (double) seGatheredWitness.size() < (double) witness.size() * fraction) {
-            auto now = pq.top();
-            pq.pop();
-            if (seGatheredWitness.count(now.second))continue;
-            seGatheredWitness.insert(now.second);
-            seWitness.erase(now.second);
-            maxTime += now.first;
-            for (auto it:seWitness) {
-                pq.push({this->tp.AdjList[now.second][it], it});
+
+
+        while (currentRound.size()) {
+            //std::cout << currentRound.size() << std::endl;
+            for (auto it:currentRound) {
+                for (auto sID:setMap[it]) {
+                    int nodeID = idMap[sID];
+                    sliceRemain[sID]--;
+                    timestampSlice[sID] = std::max(this->tp.AdjList[it][idMap[sID]] + timestamp[it],
+                                                   timestampSlice[sID]);
+                    if (sliceRemain[sID] == 0) {
+                        nextRound.push_back(idMap[sID]);
+                        if (timestampSlice[sID] < timestamp[idMap[sID]]) {
+                            timestamp[idMap[sID]] = timestampSlice[sID];
+                            parent[idMap[sID]] = sID;
+                        }
+                    }
+                }
+            }
+            currentRound.swap(nextRound);
+            nextRound.clear();
+        }
+
+
+        std::set<int> seWitness;
+        for (auto &it:witness)seWitness.insert(it);
+
+        std::vector<int> refCnt;
+        refCnt.resize(this->nodecnt);
+
+        for (int i = 0; i < this->nodecnt; i++) {
+            int sID = parent[i];
+            if (sID == -1)continue;
+            for (auto &nID:Slice[sID]) {
+                refCnt[nID]++;
+            }
+        }
+        for (int i = 0; i < this->nodecnt; i++) {
+            if (refCnt[i] > this->nodes[i].bandWidth) {
+                timestamp[i] = (double) timestamp[i] * (refCnt[i] / (double) this->nodes[i].bandWidth);
             }
         }
 
-        if ((double) seGatheredWitness.size() < (double) witness.size() * fraction)
-            maxTime = INT_MAX;
+        //calc the time we gather witness*fraction
+        std::vector<std::pair<int, int> > vCalcPri;
+        for (int i = 0; i < this->nodecnt; i++) {
+            vCalcPri.push_back({timestamp[i], i});
+        }
 
-        return {currentCommitter, maxTime,
-                -1,
-                GenerateRandomTradingInfo(mean_trading_count, stddev_trading_count, mean_trading_amount,
-                                          stddev_trading_amount)};
+        std::vector<std::pair<int, int>> gatheredWitness;
+        std::sort(vCalcPri.begin(), vCalcPri.end());
+        int now = 0, maxTime = 0;
+        for (auto &it:vCalcPri) {
+            if (seWitness.count(it.second)) {
+                now++;
+                if (now <= witness.size() * fraction) {
+                    maxTime = std::max(maxTime, it.first);
+                }
+                gatheredWitness.push_back({it.second, it.first});
+            }
+        }
+
+        return {maxTime, gatheredWitness};
     }
 };
 
